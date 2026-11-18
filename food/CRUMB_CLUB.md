@@ -37,7 +37,9 @@ Charity: "it doesn't need my permission to post, it should create a video every 
 
 ## Titles, descriptions, hashtags
 Goal: people laugh, feel good, share and tag a friend.
-- **Title** (≤ 60 chars, funny, plain words, at most 1 emoji, no clickbait lies, never "Ghibli"). **Prefer personal, relatable first-person titles** (Charity, 18 Nov: "it should be personalized like 'me after…'"): "me after…", "me when…", "me trying to…", "POV: you're the…" so viewers see themselves in the food. Examples —
+- **Title** (≤ 60 chars, funny, plain words, at most 1 emoji, no clickbait lies, never "Ghibli"). Match the title to the kind of video (Charity, 18 Nov):
+  - **Food moments & food in love → personal first-person** ("it should be personalized like 'me after…'"): "me after…", "me when…", "me trying to…", "POV: you're the…" so viewers see themselves in the food.
+  - **Cooking / kitchen-chaos skits → NO "me after"**: short, punchy and funny, 2–6 words, or simply the occasion. E.g. "happy thanksgiving 🦃", "the corn tried it 🌽", "dinner had other plans", "he was not on the menu", "one ingredient got away". Examples —
   - "me after a hot shower on a long week 🧈" (first post, 18 Nov)
   - "the corn knew what was coming 🌽"
   - "nobody told the cook the egg had plans"
