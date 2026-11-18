@@ -7,3 +7,4 @@ __pycache__/
 *.jpg
 !brand/*.jpg
 bedroom/f*.png
+food/*.png
