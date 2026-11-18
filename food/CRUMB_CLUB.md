@@ -46,16 +46,21 @@ Goal: people laugh, feel good, share and tag a friend.
   - "me pretending I can cook for my in-laws"
 - **Description:** one funny line + a question that invites comments ("which food would you rescue? 👇") + `Subscribe and join the Crumb Club 🌽` + 3–5 hashtags: `#shorts #funnyfood #foodcomedy` plus 1–2 specific (`#thanksgiving`, `#butter`).
 - No Kindly Ledger link. No mention of Charity's country.
+- **First comment (every post, from 19 Nov; Charity's request):** an engaging comment posted with the Short via Metricool `firstCommentText`, for Charity to pin. Lowercase, warm, ≤ 200 chars, tied to that video's joke, and easy to answer. Use one of these shapes (rotate them):
+  - **relatable question + your own answer as an example:** "be honest: what's your \"melting into the pan\" move after a long week? 🧈 mine's hot shower → blanket → pretending my inbox doesn't exist. drop yours 👇"
+  - **tag a friend:** "the butter said 'do not disturb' 🧈😌 tag the friend who's this exact butter every friday 👇"
+  - **quick vote with emoji options:** "after a long week, you're… 🛁 hot shower butter / 🛋️ couch potato / 🍕 snack goblin. pick one 👇"
+  No links, no "subscribe" (that's in the description), no begging for likes, and not the same wording as the description's question. Mention it in the report so Charity can pin it (YouTube app: Short → Comments → ⋮ → Pin).
 
 ## Publishing (exact steps)
 1. Final MP4: H.264 1080×1920, crf ~18–20, AAC, < 95 MB; filename `crumb-YYYYMMDD-slug.mp4`.
 2. Attach + clone `thesoftsquadtv-prog/softsquad-media` (add_repo, push access), copy into `v/`, commit, `git -c push.negotiate=true push origin HEAD:main`.
 3. Media URL: `https://raw.githubusercontent.com/thesoftsquadtv-prog/softsquad-media/main/v/<file>.mp4`.
-4. Metricool `createScheduledPost`: blogId 8212990, providers YouTube only, publicationDate = the 02:00 Lagos slot (timezone Africa/Lagos), text = description, media = [URL], `youtubeData`: `{title, type: "short", privacy: "public", madeForKids: false, isAiGeneratedContent: true, category: "COMEDY"}` (fall back to ENTERTAINMENT if COMEDY is rejected). Check the response: media URL should become static.metricool.com. Then delete the file from `softsquad-media/v/` and push.
+4. Metricool `createScheduledPost`: blogId 8212990, providers YouTube only, publicationDate = the 02:00 Lagos slot (timezone Africa/Lagos), text = description, media = [URL], `firstCommentText` = the engaging first comment (see "First comment"), `youtubeData`: `{title, type: "short", privacy: "public", madeForKids: false, isAiGeneratedContent: true, category: "COMEDY"}` (fall back to ENTERTAINMENT if COMEDY is rejected). Check the response: media URL should become static.metricool.com. Then delete the file from `softsquad-media/v/` and push.
 5. Log the post (date, title, idea, cost, review notes) by appending to `food/crumb_log.md` in softsquad-studio, commit + push. Never commit the key.
 6. Report to Charity in 3–4 lines (SendUserMessage / push): what was posted and when, the cost, anything she must do.
 
-**If Metricool tools aren't available in your run** (no `createScheduledPost`): don't stop. Push the finished MP4 to `softsquad-media/queue/crumb-YYYYMMDD-slug.mp4` plus a matching `.json` with `{"blogId":8212990,"publicationDate":"YYYY-MM-DDT02:00:00","timezone":"Africa/Lagos","title":...,"text":...,"category":"COMEDY"}`, log it as "queued", and say so in the report. The daily manager (which has Metricool) schedules anything in `queue/` on its next run.
+**If Metricool tools aren't available in your run** (no `createScheduledPost`): don't stop. Push the finished MP4 to `softsquad-media/queue/crumb-YYYYMMDD-slug.mp4` plus a matching `.json` with `{"blogId":8212990,"publicationDate":"YYYY-MM-DDT02:00:00","timezone":"Africa/Lagos","title":...,"text":...,"firstCommentText":...,"category":"COMEDY"}`, log it as "queued", and say so in the report. The daily manager (which has Metricool) schedules anything in `queue/` on its next run.
 
 ## Learning loop
 Every run: check Metricool analytics for brand 8212990 (lags 2–3 days) and the public view counts on @thecrumbclub. Note in `crumb_log.md` which kinds/foods/titles get the most views, likes and comments, and lean into them. Spend cap $3/day (Charity can raise it).
