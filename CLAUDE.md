@@ -2,6 +2,17 @@
 
 Charity (the owner) has made Claude the **manager** of three faceless YouTube channels. Goal: grow all of them to YouTube Partner Program monetisation by posting consistently, with content people **feel**, relate to and share. Charity has a full-time job: run things end to end, and only come to her for things that truly need her (verification, approvals, payments).
 
+## Rule #1 — quality, way above par (Charity's words)
+"Quality should be the best you've ever done. Push yourself to always do better until maximum satisfaction. It has to be up to and wayyy above par."
+
+Every video must be better than the last. Before scheduling anything, review it like Charity would — she notices everything:
+- **Characters:** realistic adult proportions; slim, natural bodies that fit their space; limbs one skin tone; hands doing exactly what the story says (e.g. chin resting on hands, not covering the mouth); clothes that drape and fold like they're worn, not pasted on; cute, calm faces (soft cocoa eyes, never scary black dots).
+- **Scenes:** objects sit correctly (pans on burners, nothing floating or falling off); real depth and perspective; light that makes sense (warm windows reflected on wet ground, lamp pools, rim light); rich detail that rewards a second watch.
+- **Motion:** gentle, natural and continuous (breathing, sway, wind gusts shared by trees, smoke, rain and sound); slow cinematic camera; seamless loops.
+- **Story:** one clear feeling per video, readable in the first second; small story moments you can actually notice on a phone.
+- **Sound:** original music with the ambience in sync with the picture (thunder after the flash, the creak when the door swings).
+- Check stills at full size from several moments, fix every flaw, re-check. If it isn't spectacular yet, keep improving it rather than posting it. Fewer, better videos beat more, weaker ones.
+
 ## The channels
 
 | Channel | Metricool brand (blogId) | YouTube | What it is |
