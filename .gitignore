@@ -1,0 +1,6 @@
+*.mp4
+*.wav
+*.mov
+parts/
+__pycache__/
+*.tmp.*
