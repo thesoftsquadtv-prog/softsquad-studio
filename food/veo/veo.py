@@ -1,41 +1,53 @@
 #!/usr/bin/env python3
-"""Veo test pipeline for the food channel ("butter at the spa").
+"""AI video test pipeline for the food channel ("butter at the spa").
+
+Veo was retired from the Gemini API on 22 Oct 2026; this now uses Gemini Omni Flash
+(gemini-omni-1.2-flash) through the Interactions API: POST /v1beta/interactions with
+response_format {type: video, aspect_ratio, duration "3s".."15s", resolution 360p|720p|1080p|4k,
+delivery: uri}. 1080p/4K are upscaled by Google inside the same call (no separate step).
+Omni has no negative-prompt field: write "no X" into the prompt itself.
+Pricing (Nov 2026, paid tier): video output $12 / 1M tokens; 720p 5,792 tok/s (~$0.07/s),
+1080p 8,688 tok/s (~$0.104/s), 4K 17,376 tok/s (~$0.209/s); thinking billed at $9 / 1M.
 
 Usage:
-  python3 food/veo/veo.py models                 # list available Veo models (access check)
-  python3 food/veo/veo.py gen OUTDIR [N_TAKES]   # generate takes (default 2), poll, download
+  python3 food/veo/veo.py models                 # check the Omni model is available (free)
+  python3 food/veo/veo.py gen OUTDIR [N_TAKES]   # generate takes (default 2) and download
   python3 food/veo/veo.py stills TAKE.mp4        # export review stills (5 moments)
   python3 food/veo/veo.py caption IN.mp4 OUT.mp4 # add caption, H.264 1080x1920 + AAC
 
-Needs GEMINI_API_KEY in the environment and generativelanguage.googleapis.com
-allowed in the cloud environment's network settings. The key is never printed.
+Env: GEMINI_API_KEY (never printed); OMNI_RES (default 1080p), OMNI_DUR (default 8),
+MAX_USD (default 3.00: refuses to start if the estimate is above it).
+Needs generativelanguage.googleapis.com allowed in the environment's network settings.
 """
-import json, os, subprocess, sys, time, urllib.request, urllib.error
+import json, os, subprocess, sys, time, threading, urllib.request, urllib.error
 
 BASE = "https://generativelanguage.googleapis.com/v1beta"
 HERE = os.path.dirname(os.path.abspath(__file__))
 ROOT = os.path.dirname(os.path.dirname(HERE))
-PREFER = ["veo-3.1-fast-generate-preview", "veo-3.1-fast-generate-001",
-          "veo-3.1-generate-preview", "veo-3.1-generate-001"]
+PREFER = ["gemini-omni-1.2-flash", "gemini-omni-1.1-flash"]
+TOK_PER_S = {"360p": 1931, "720p": 5792, "1080p": 8688, "4k": 17376}
+USD_VIDEO_TOK, USD_TEXT_TOK = 12.0 / 1e6, 9.0 / 1e6
 
 PROMPT = (
-    "Photorealistic macro food cinematography, vertical 9:16, 8 seconds. "
-    "A cosy home kitchen at night. A small rectangular pat of golden, slightly glossy butter with a tiny, "
-    "cute, content face pressed softly into its surface - two gently closed crescent eyes and a small "
-    "blissful smile, nothing else - slides slowly into a hot black cast-iron pan sitting flat on a gas "
-    "burner. It settles, leans back and slowly melts in total bliss; tiny golden bubbles foam around its "
-    "edges like a little hot tub, and soft wisps of steam curl upward. The face stays the same single face "
-    "and softens as it melts. Warm tungsten practical light from above the stove, faint blue window glow "
-    "and rain-blurred bokeh in the background, shallow depth of field, rich realistic textures of seasoned "
-    "cast iron and melting butter. Slow, gentle push-in camera. "
-    "Audio: soft steady sizzle and gentle bubbling, a faint rain patter, and one tiny contented sigh "
-    "as the butter settles. No music, no speech, no text, no people, no hands."
+    "A single continuous, unbroken shot with no scene cuts. Photorealistic macro food cinematography. "
+    "A cosy home kitchen at night. A small rectangular pat of golden, slightly glossy butter has one tiny, "
+    "cute, content face softly pressed into its top surface: two gently closed crescent eyes and a small "
+    "blissful closed-mouth smile, nothing else on it. The butter slides slowly down into a hot black "
+    "seasoned cast-iron pan that sits flat and level on a gas burner with a low blue flame. It settles, "
+    "leans back and slowly melts in total bliss, like someone sinking into a hot tub after a long week: "
+    "tiny golden bubbles foam and fizz around its softening edges, and soft wisps of steam curl upward. "
+    "It is always the same single face, and it softens as the butter melts. Warm tungsten light from a "
+    "hood lamp above the stove, a faint blue rainy window glow far behind, creamy bokeh, shallow depth of "
+    "field, rich realistic textures of cast iron and melting butter. Slow, gentle push-in camera. "
+    "Sound design: a soft steady sizzle and gentle bubbling, faint rain on the window, and one tiny, "
+    "contented little sigh as the butter settles into the pan. No music, no dialogue, no speech. "
+    "No text, no captions, no logos, no people, no hands, no utensils moving, no extra faces, no teeth, "
+    "no open mouth, no cartoon or 3D-render look."
 )
 VARIANT = (
-    " Seen from a low three-quarter angle at pan level, the butter's bliss reads like someone sinking into "
-    "a warm bath after a long day."
+    " Camera angle: a low three-quarter view at the level of the pan rim, so the butter's face is seen "
+    "clearly as it leans back."
 )
-NEG = "text, captions, watermark, logo, people, hands, extra faces, multiple faces, teeth, open mouth, distorted face, cartoon, 3D render look"
 
 
 def key():
@@ -45,91 +57,101 @@ def key():
     return k
 
 
-def call(method, url, body=None):
+def call(method, url, body=None, timeout=120):
     req = urllib.request.Request(url, method=method, headers={"x-goog-api-key": key(),
                                  "Content-Type": "application/json"},
                                  data=json.dumps(body).encode() if body is not None else None)
     try:
-        with urllib.request.urlopen(req, timeout=120) as r:
+        with urllib.request.urlopen(req, timeout=timeout) as r:
             return json.loads(r.read())
     except urllib.error.HTTPError as e:
-        sys.exit(f"HTTP {e.code}: {e.read().decode()[:800]}")
-
-
-def veo_models():
-    out, tok = [], ""
-    while True:
-        d = call("GET", f"{BASE}/models?pageSize=200" + (f"&pageToken={tok}" if tok else ""))
-        out += [m["name"].split("/")[-1] for m in d.get("models", []) if "veo" in m["name"]]
-        tok = d.get("nextPageToken")
-        if not tok:
-            return out
+        raise RuntimeError(f"HTTP {e.code}: {e.read().decode()[:1200]}")
 
 
 def probe(name):
     """GET one model directly; returns (ok, Google's exact message). Never spends money."""
-    req = urllib.request.Request(f"{BASE}/models/{name}", headers={"x-goog-api-key": key()})
     try:
-        with urllib.request.urlopen(req, timeout=60) as r:
-            return True, ",".join(json.loads(r.read()).get("supportedGenerationMethods", []))
-    except urllib.error.HTTPError as e:
-        try:
-            return False, f"HTTP {e.code}: " + json.loads(e.read())["error"]["message"]
-        except Exception:
-            return False, f"HTTP {e.code}"
+        d = call("GET", f"{BASE}/models/{name}", timeout=60)
+        return True, ",".join(d.get("supportedGenerationMethods", []))
+    except RuntimeError as e:
+        return False, str(e)
 
 
-def pick(models):
+def pick():
+    msgs = []
     for p in PREFER:
-        if p in models:
+        ok, msg = probe(p)
+        if ok:
             return p
-    fast = [m for m in models if "3.1" in m and "fast" in m] or [m for m in models if "3.1" in m]
-    if not fast:
-        # The list can omit models the key may still call; ask for each preferred one directly
-        # and stop (before any paid call) with Google's exact words if none is available.
-        msgs = []
-        for p in PREFER:
-            ok, msg = probe(p)
-            if ok:
-                return p
-            msgs.append(f"{p}: {msg}")
-        sys.exit("No Veo 3.1 model available to this key (nothing generated, nothing spent):\n  "
-                 + "\n  ".join(msgs))
-    return sorted(fast)[-1]
+        msgs.append(f"{p}: {msg}")
+    sys.exit("No Gemini Omni Flash model available to this key (nothing generated, nothing spent):\n  "
+             + "\n  ".join(msgs))
+
+
+def estimate(n, dur, res):
+    return n * dur * TOK_PER_S[res] * USD_VIDEO_TOK
+
+
+def video_part(d):
+    for step in d.get("steps", []):
+        if step.get("type") == "model_output":
+            for c in step.get("content", []):
+                if c.get("type") == "video":
+                    return c
+    return None
+
+
+def one_take(i, model, res, dur, outdir, log):
+    body = {"model": model, "input": PROMPT + (VARIANT if i % 2 else ""),
+            "response_format": {"type": "video", "aspect_ratio": "9:16", "duration": f"{dur}s",
+                                "resolution": res, "delivery": "uri"},
+            "background": False, "store": False, "stream": False}
+    t0 = time.time()
+    try:  # no automatic retry: a timed-out call may still be billed
+        d = call("POST", f"{BASE}/interactions", body, timeout=900)
+    except Exception as e:
+        log[i] = {"error": str(e)}; print(f"take {i + 1} error: {e}"); return
+    meta = {k: v for k, v in d.items() if k != "steps"}
+    meta["steps"] = [{**s, "content": [{k: (v if k != "data" else f"<{len(v)} b64 chars>")
+                                         for k, v in c.items()} for c in s.get("content", [])]}
+                     for s in d.get("steps", [])]
+    meta["seconds"] = round(time.time() - t0)
+    log[i] = meta
+    v = video_part(d)
+    dst = os.path.join(outdir, f"take{i + 1}.mp4")
+    if not v:
+        print(f"take {i + 1}: no video returned (status {d.get('status')})"); return
+    if v.get("data"):
+        import base64
+        open(dst, "wb").write(base64.b64decode(v["data"]))
+    else:
+        req = urllib.request.Request(v["uri"], headers={"x-goog-api-key": key()})
+        for _ in range(60):  # file may still be processing
+            try:
+                with urllib.request.urlopen(req, timeout=300) as r, open(dst, "wb") as f:
+                    f.write(r.read())
+                break
+            except urllib.error.HTTPError as e:
+                if e.code not in (404, 409, 425, 503):
+                    raise
+                time.sleep(5)
+    print(f"take {i + 1} saved {dst} ({meta['seconds']} s)")
 
 
 def gen(outdir, n=2):
     os.makedirs(outdir, exist_ok=True)
-    model = pick(veo_models())
-    print("model:", model)
-    ops = []
-    for i in range(n):
-        body = {"instances": [{"prompt": PROMPT + (VARIANT if i % 2 else "")}],
-                "parameters": {"aspectRatio": "9:16", "resolution": "1080p", "durationSeconds": 8,
-                               "negativePrompt": NEG, "seed": 1101 + i * 37}}
-        op = call("POST", f"{BASE}/models/{model}:predictLongRunning", body)
-        print("take", i + 1, "op:", op["name"])
-        ops.append(op["name"])
-    for i, name in enumerate(ops):
-        while True:
-            d = call("GET", f"{BASE}/{name}")
-            if d.get("done"):
-                break
-            time.sleep(10)
-        if "error" in d:
-            print("take", i + 1, "error:", d["error"]); continue
-        resp = d["response"].get("generateVideoResponse", d["response"])
-        if resp.get("raiFilteredReasons"):
-            print("take", i + 1, "filtered:", resp["raiFilteredReasons"])
-        for s in resp.get("generatedSamples", []):
-            uri = s["video"]["uri"]
-            dst = os.path.join(outdir, f"take{i + 1}.mp4")
-            req = urllib.request.Request(uri, headers={"x-goog-api-key": key()})
-            with urllib.request.urlopen(req, timeout=300) as r, open(dst, "wb") as f:
-                f.write(r.read())
-            print("saved", dst)
-    json.dump({"model": model, "prompt": PROMPT, "variant": VARIANT, "takes": n},
-              open(os.path.join(outdir, "meta.json"), "w"), indent=1)
+    res, dur = os.environ.get("OMNI_RES", "1080p"), int(os.environ.get("OMNI_DUR", "8"))
+    cap, est = float(os.environ.get("MAX_USD", "3.00")), estimate(n, dur, res)
+    if est > cap:
+        sys.exit(f"estimate ${est:.2f} is above MAX_USD ${cap:.2f}; nothing sent")
+    model = pick()  # free availability check before any paid call
+    print(f"model: {model}  {n} x {dur}s {res} 9:16  video estimate ~${est:.2f} (+ thinking tokens)")
+    log = [None] * n
+    ts = [threading.Thread(target=one_take, args=(i, model, res, dur, outdir, log)) for i in range(n)]
+    [t.start() for t in ts]; [t.join() for t in ts]
+    json.dump({"model": model, "resolution": res, "duration": dur, "prompt": PROMPT, "variant": VARIANT,
+               "responses": log}, open(os.path.join(outdir, "meta.json"), "w"), indent=1)
+    print("usage:", json.dumps([(r or {}).get("usage") for r in log]))
 
 
 def stills(path):
@@ -176,9 +198,7 @@ def caption(src, dst):
 if __name__ == "__main__":
     cmd = sys.argv[1] if len(sys.argv) > 1 else "models"
     if cmd == "models":
-        ms = veo_models()
-        print("\n".join(ms) or "no Veo models listed")
-        print("would use:", pick(ms))
+        print("would use:", pick())
     elif cmd == "gen":
         gen(sys.argv[2], int(sys.argv[3]) if len(sys.argv) > 3 else 2)
     elif cmd == "stills":
