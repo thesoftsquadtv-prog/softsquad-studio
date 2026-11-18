@@ -47,7 +47,7 @@ Slots: Soft Squad already posts 19:00 daily (YouTube + TikTok) through 27 Nov an
 - **Highest visual quality, always.** She checks details: realistic proportions, clothes that drape, limbs one skin tone, objects sitting correctly, hands where they should be. Check stills at full size before every full render. Never cut corners to hit volume.
 - Original work only: our own characters, scenes and synthesised music. Take the *feeling* of a trend, never copy someone's video, sound, character or logo.
 - Never put "Ghibli" in titles. Don't add the Kindly Ledger link to descriptions until she says so.
-- `madeForKids: false`, `isAiGeneratedContent: false` (stylised animation, not realistic people).
+- `madeForKids: false`, `isAiGeneratedContent: false` (stylised animation, not realistic people) — except Crumb Club: `true` (photoreal AI; see food/CRUMB_CLUB.md).
 - Heavy topics (crying, heartbreak) stay tender and human, never hopeless; no self-harm content.
 - Avoid mass-produced repetition (YouTube inauthentic-content policy): every video genuinely different.
 
