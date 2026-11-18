@@ -27,10 +27,34 @@ Also: holidays and moments (Thanksgiving family cooking with an escaping turkey,
 
 **Environment:** these runs need Charity's **Default** cloud environment (it has `GEMINI_API_KEY` and Google's domains allowed). Scheduled tasks inherit the environment of the session that creates them, so create Crumb Club tasks from a Default session.
 
-## Publishing
-- Disclose as altered/synthetic content (photoreal AI): `isAiGeneratedContent: true` for this channel (unlike the other three).
-- Cadence to start: 1/day around 02:00 Lagos (US evening). Ramp with data.
-- Launch piece: Thanksgiving family-cooking skit with the escaping turkey (Thanksgiving is Thu 26 Nov 2026), posted 24–25 Nov.
+## Running the channel (autonomous — Charity's standing approval, 18 Nov 2026)
+Charity: "it doesn't need my permission to post, it should create a video every day and post it with funny titles, remember we want people to laugh and feel good."
+- **Make one new video every day and schedule it yourself.** No approval step. Quality gate instead: the "what's out of place?" review must pass (separate reviewer agent). If a video doesn't pass after fixes within the day's budget, post nothing that day rather than a weak one, and say why in the report.
+- **Accounts:** YouTube @thecrumbclub (UC_H2r0rLOvUhpxDi2N0CztQ); Metricool brand **8212990** (timezone Africa/Lagos).
+- **Slot:** 02:00 Lagos daily (US evening). Always `getScheduledPosts` for blogId 8212990 first; never double-post a day. If the next night is already filled, make the following night's video.
+- **Order:** first post = the butter-at-the-spa video made 18 Nov (night of 18→19 Nov, 02:00). Then one new video per day. Thanksgiving turkey skit must post 24 or 25 Nov (Thanksgiving is Thu 26 Nov).
+- **Variety:** rotate the three kinds (kitchen chaos, food moments, food in love) and different foods/cuisines; never the same food two days running; check the last 7 posts so nothing repeats (YouTube inauthentic-content policy). Ride the calendar (Thanksgiving, Christmas, New Year diets, Valentine's, Super Bowl snacks).
+
+## Titles, descriptions, hashtags
+Goal: people laugh, feel good, share and tag a friend.
+- **Title** (≤ 60 chars, funny, plain words, at most 1 emoji, no clickbait lies, never "Ghibli"): examples —
+  - "butter after a hot shower on a long week 🧈"
+  - "the corn knew what was coming 🌽"
+  - "nobody told the cook the egg had plans"
+  - "me pretending I can cook for my in-laws"
+- **Description:** one funny line + a question that invites comments ("which food would you rescue? 👇") + `Subscribe and join the Crumb Club 🌽` + 3–5 hashtags: `#shorts #funnyfood #foodcomedy` plus 1–2 specific (`#thanksgiving`, `#butter`).
+- No Kindly Ledger link. No mention of Charity's country.
+
+## Publishing (exact steps)
+1. Final MP4: H.264 1080×1920, crf ~18–20, AAC, < 95 MB; filename `crumb-YYYYMMDD-slug.mp4`.
+2. Attach + clone `thesoftsquadtv-prog/softsquad-media` (add_repo, push access), copy into `v/`, commit, `git -c push.negotiate=true push origin HEAD:main`.
+3. Media URL: `https://raw.githubusercontent.com/thesoftsquadtv-prog/softsquad-media/main/v/<file>.mp4`.
+4. Metricool `createScheduledPost`: blogId 8212990, providers YouTube only, publicationDate = the 02:00 Lagos slot (timezone Africa/Lagos), text = description, media = [URL], `youtubeData`: `{title, type: "short", privacy: "public", madeForKids: false, isAiGeneratedContent: true, category: "COMEDY"}` (fall back to ENTERTAINMENT if COMEDY is rejected). Check the response: media URL should become static.metricool.com. Then delete the file from `softsquad-media/v/` and push.
+5. Log the post (date, title, idea, cost, review notes) by appending to `food/crumb_log.md` in softsquad-studio, commit + push. Never commit the key.
+6. Report to Charity in 3–4 lines (SendUserMessage / push): what was posted and when, the cost, anything she must do.
+
+## Learning loop
+Every run: check Metricool analytics for brand 8212990 (lags 2–3 days) and the public view counts on @thecrumbclub. Note in `crumb_log.md` which kinds/foods/titles get the most views, likes and comments, and lean into them. Spend cap $3/day (Charity can raise it).
 
 ## First ideas backlog
 - Corn escapes under the table (Charity's original skit)
