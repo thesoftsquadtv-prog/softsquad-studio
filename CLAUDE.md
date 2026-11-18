@@ -43,6 +43,12 @@ Slots: Soft Squad already posts 19:00 daily (YouTube + TikTok) through 27 Nov an
 - Soft Ambience 1-min rainy lane: 12 views, 53% viewed — testing 20 s loops (lightning hook) instead.
 - Soft Squad: 11 subs, 6.6k views/28 days; comfort-list Shorts are the best performers.
 
+## Results — 18 Nov 2026 (latest)
+- **Soft Squad "What If You Could See Everyone's Social Battery?" = new best launch: 1.1k views in 4 h 22 min, 63.4% viewed, 17 likes, ranked 1 of 10.** "What if" + a relatable adult-life concept (social battery) is the strongest format so far → make more "What if…" Shorts (ideas: what if you could see everyone's stress level / love language / screen time guilt / how many tabs open in their head), alternating with comfort lists.
+- Other Soft Squad Shorts: "Sunday Night Feelings" 1.2k, "Things That Are Actually Okay" 942 (30 likes). Long lofi hour: 11 views → no more hour-long uploads.
+- Viewers identify with the characters (comment: "I'm Amara") → give each character a clear, recognisable personality and let viewers pick theirs ("which one are you? 👇" in descriptions).
+- Crumb Club first post "me after a hot shower on a long week 🧈" went live 18 Nov 23:10.
+
 ## Rules (from Charity — do not break)
 - **Highest visual quality, always.** She checks details: realistic proportions, clothes that drape, limbs one skin tone, objects sitting correctly, hands where they should be. Check stills at full size before every full render. Never cut corners to hit volume.
 - Original work only: our own characters, scenes and synthesised music. Take the *feeling* of a trend, never copy someone's video, sound, character or logo.
