@@ -12,6 +12,8 @@ Pricing (Nov 2026, paid tier): video output $12 / 1M tokens; 720p 5,792 tok/s (~
 Usage:
   python3 food/veo/veo.py models                 # check the Omni model is available (free)
   python3 food/veo/veo.py gen OUTDIR [N_TAKES]   # generate takes (default 2) and download
+  python3 food/veo/veo.py frame OUT.png [EDIT PREV_ID]  # 2K 9:16 start frame (Nano Banana 2.1)
+  python3 food/veo/veo.py animate FRAME.png OUTDIR      # Omni image-to-video, one take
   python3 food/veo/veo.py stills TAKE.mp4        # export review stills (5 moments)
   python3 food/veo/veo.py caption IN.mp4 OUT.mp4 # add caption, H.264 1080x1920 + AAC
 
@@ -154,6 +156,130 @@ def gen(outdir, n=2):
     print("usage:", json.dumps([(r or {}).get("usage") for r in log]))
 
 
+IMG_MODEL = "gemini-nano-banana-2.1"  # ~$0.05 per 2K image (Nov 2026)
+FRAME_PROMPT = (
+    "Photorealistic macro food photograph, vertical 9:16, shot on a full-frame camera with a 100mm macro "
+    "lens at f/2.8. A cosy home kitchen at night. A well-seasoned, real black cast-iron skillet sits flat "
+    "and level on the grate of a gas hob; exactly one long cast-iron handle is visible, extending out of "
+    "frame to the lower right; the pan has a single smooth round rim (no spouts). Under it, a gas burner "
+    "shows a ring of small separate blue flame jets with orange tips. Resting on the inner edge of the "
+    "skillet, just about to slide down into the pan, is one small rectangular pat of fresh golden butter, "
+    "real butter texture with soft slightly glossy edges. On the butter's top face there is one tiny, cute, "
+    "clean face gently pressed into the butter: two softly closed crescent eyes curving downward and one "
+    "small content smile, a faint warm blush on each cheek. Nothing else on the butter: no eyebrows, no "
+    "extra lines, no nose, no marks. The pan surface is hot with a faint shimmer; only a few very faint, "
+    "thin, low wisps of steam just above the pan surface, nothing curly or stylised. Warm tungsten light "
+    "from a range-hood lamp above (lamp itself out of frame), a rainy window glowing deep blue in the "
+    "softly blurred background with raindrops on the glass, a few blurred jars and a wooden spoon pot on "
+    "the counter far behind. Shallow depth of field, butter and pan rim tack sharp, rich realistic "
+    "textures. Leave calm, darker, uncluttered space in the top quarter of the frame. No text, no people, "
+    "no hands, no utensils touching the butter, no cartoon or 3D-render look."
+)
+I2V_PROMPT = (
+    "Use this image as the exact first frame and animate it as one single continuous, unbroken shot, no "
+    "scene cuts, photorealistic macro food footage. The pat of butter slowly slides off the inner edge of "
+    "the cast-iron skillet down onto the hot pan surface and settles there like someone sinking into a hot "
+    "tub after a long week. Over the eight seconds it visibly softens, slumps and shrinks: its edges round "
+    "off, it loses height, and it spreads into a pool of foamy, gently bubbling melted golden butter, so "
+    "by the end it is a small soft rounded mound sitting in a wide foamy pool. Its tiny face stays intact, "
+    "the same single face the whole time: softly closed crescent eyes and a small blissful smile, sinking "
+    "lower but never distorting, splitting or gaining extra marks. Only faint, thin, low wisps of steam "
+    "rise just above the pan. The gas flame jets flicker gently. Camera: very slow, gentle push-in toward "
+    "the butter, steady, no shake. Keep the warm night-kitchen lighting and the rainy blue window. "
+    "Sound design: a soft sizzle that begins exactly as the butter touches the pan and builds into gentle "
+    "bubbling, faint rain on the window, and one tiny, soft, contented sigh as the butter settles. "
+    "No music, no dialogue, no speech. No text, no people, no hands, no extra faces, no curly cartoon steam."
+)
+
+
+def _interact(body, timeout=600):
+    return call("POST", f"{BASE}/interactions", body, timeout=timeout)
+
+
+def _save_image(d, dst):
+    import base64
+    for step in d.get("steps", []):
+        if step.get("type") == "model_output":
+            for c in step.get("content", []):
+                if c.get("type") == "image" and c.get("data"):
+                    open(dst, "wb").write(base64.b64decode(c["data"]))
+                    return True
+    return False
+
+
+def _img_cost(u):
+    u = u or {}
+    out = sum(m.get("tokens", 0) for m in u.get("output_tokens_by_modality", []) if m.get("modality") == "image")
+    txt = u.get("total_output_tokens", 0) - out + u.get("total_thought_tokens", 0)
+    return out * 30e-6 + txt * 7.5e-6 + u.get("total_input_tokens", 0) * 1.5e-6
+
+
+def frame(dst, instruction=None, prev=None):
+    """Make (or, with prev = previous interaction id, edit) a 2K 9:16 start frame."""
+    ok, msg = probe(IMG_MODEL)
+    if not ok:
+        sys.exit(f"{IMG_MODEL} not available (nothing spent): {msg}")
+    body = {"model": IMG_MODEL, "input": instruction or FRAME_PROMPT,
+            "response_format": {"type": "image", "mime_type": "image/jpeg", "aspect_ratio": "9:16",
+                                "image_size": "2K"}}
+    if prev:
+        body["previous_interaction_id"] = prev
+    d = _interact(body)
+    if not _save_image(d, dst):
+        sys.exit(f"no image returned: status {d.get('status')}, " +
+                 json.dumps([s.get("type") for s in d.get("steps", [])]))
+    cost = _img_cost(d.get("usage"))
+    print(f"saved {dst}  id={d.get('id')}  ~${cost:.3f}")
+    with open(os.path.splitext(dst)[0] + ".json", "w") as f:
+        json.dump({"id": d.get("id"), "usage": d.get("usage"), "prompt": body["input"], "prev": prev,
+                   "cost_usd": round(cost, 4)}, f, indent=1)
+
+
+def animate(img, outdir):
+    """Image-to-video: one Omni take from a start frame (8 s, 1080p, 9:16)."""
+    import base64
+    res, dur = os.environ.get("OMNI_RES", "1080p"), int(os.environ.get("OMNI_DUR", "8"))
+    cap, est = float(os.environ.get("MAX_USD", "1.00")), estimate(1, dur, res)
+    if est > cap:
+        sys.exit(f"estimate ${est:.2f} is above MAX_USD ${cap:.2f}; nothing sent")
+    model = pick()
+    os.makedirs(outdir, exist_ok=True)
+    mime = "image/png" if img.lower().endswith(".png") else "image/jpeg"
+    body = {"model": model,
+            "input": [{"type": "image", "data": base64.b64encode(open(img, "rb").read()).decode(),
+                       "mime_type": mime},
+                      {"type": "text", "text": I2V_PROMPT}],
+            "generation_config": {"video_config": {"task": "image_to_video"}},
+            "response_format": {"type": "video", "aspect_ratio": "9:16", "duration": f"{dur}s",
+                                "resolution": res, "delivery": "uri"},
+            "background": False, "store": True, "stream": False}
+    print(f"model: {model}  1 x {dur}s {res} 9:16 from {os.path.basename(img)}  ~${est:.2f} + thinking")
+    t0 = time.time()
+    d = _interact(body, timeout=900)  # no automatic retry: a timed-out call may still be billed
+    v = video_part(d)
+    meta = {k: v2 for k, v2 in d.items() if k != "steps"}
+    meta["seconds"] = round(time.time() - t0)
+    json.dump({"model": model, "prompt": I2V_PROMPT, "frame": img, "response": meta},
+              open(os.path.join(outdir, "meta.json"), "w"), indent=1)
+    if not v:
+        sys.exit(f"no video returned: status {d.get('status')}")
+    dst = os.path.join(outdir, "take.mp4")
+    if v.get("data"):
+        open(dst, "wb").write(base64.b64decode(v["data"]))
+    else:
+        req = urllib.request.Request(v["uri"], headers={"x-goog-api-key": key()})
+        for _ in range(60):
+            try:
+                with urllib.request.urlopen(req, timeout=300) as r, open(dst, "wb") as f:
+                    f.write(r.read())
+                break
+            except urllib.error.HTTPError as e:
+                if e.code not in (404, 409, 425, 503):
+                    raise
+                time.sleep(5)
+    print(f"saved {dst} ({meta['seconds']} s)  usage: {json.dumps(d.get('usage'))}")
+
+
 def stills(path):
     base = os.path.splitext(path)[0]
     for t in (0.2, 2.0, 4.0, 6.0, 7.8):
@@ -207,6 +333,10 @@ if __name__ == "__main__":
         print("would use:", pick())
     elif cmd == "gen":
         gen(sys.argv[2], int(sys.argv[3]) if len(sys.argv) > 3 else 2)
+    elif cmd == "frame":   # frame OUT.png [EDIT_INSTRUCTION PREV_ID]
+        frame(sys.argv[2], *(sys.argv[3:5]))
+    elif cmd == "animate":  # animate FRAME.png OUTDIR
+        animate(sys.argv[2], sys.argv[3])
     elif cmd == "stills":
         stills(sys.argv[2])
     elif cmd == "caption":
