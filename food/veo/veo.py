@@ -174,23 +174,29 @@ def font_ttf():
 
 def caption(src, dst):
     ttf = font_ttf()
+    y1 = int(os.environ.get("CAP_Y", "170"))  # top line; keep clear of the subject's path
+    y2 = y1 + 100
     # fade: fully visible from frame 0, hold to 4.2 s, fade out by 5.2 s
     alpha = "if(lt(t,4.2),1,if(lt(t,5.2),1-(t-4.2),0))"
-    def line(txt, y, glow):
-        c = "0xFFD9A0" if glow else "0xFFF8F0"
-        s = (f"drawtext=fontfile={ttf}:text='{txt}':fontsize=82:fontcolor={c}:"
-             f"x=(w-text_w)/2:y={y}:alpha='{alpha}'")
-        return s
-    # warm glow layer (blurred, warm) under crisp soft-white text; blend in RGB (gbrp),
-    # blending YUV planes shifts the chroma and turns the whole frame purple
-    glow = f"[0:v]scale=1080:1920:flags=lanczos,setsar=1,format=gbrp,split[a][b];" \
-           f"[b]drawbox=c=black@1:t=fill,{line('me after a hot shower', 300, 1)},{line('on a long week', 400, 1)}," \
-           f"gblur=sigma=14[g];" \
-           f"[a][g]blend=all_mode=screen:all_opacity=0.55[c];" \
-           f"[c]{line('me after a hot shower', 300, 0)},{line('on a long week', 400, 0)},format=yuv420p[v]"
+    def line(txt, y, kind):
+        c = {"glow": "0xFFD9A0", "text": "0xFFF8F0", "shadow": "0x1A0E06"}[kind]
+        return (f"drawtext=fontfile={ttf}:text='{txt}':fontsize=82:fontcolor={c}:"
+                f"x=(w-text_w)/2:y={y}:alpha='{alpha}'")
+    def both(kind):
+        return f"{line('me after a hot shower', y1, kind)},{line('on a long week', y2, kind)}"
+    # 1) soft dark shadow (blurred, alpha) so the words read over bright windows and steam;
+    # 2) warm glow (blurred, screen-blended); 3) crisp soft-white text on top.
+    # Blend in RGB (gbrp): blending YUV planes shifts the chroma and turns the frame purple.
+    glow = f"[0:v]scale=1080:1920:flags=lanczos,setsar=1,format=gbrp,split=3[a][b][s];" \
+           f"[s]format=rgba,colorchannelmixer=aa=0,{both('shadow')},gblur=sigma=16,colorchannelmixer=aa=0.75[sh];" \
+           f"[a][sh]overlay=format=auto,format=gbrp[a2];" \
+           f"[b]drawbox=c=black@1:t=fill,{both('glow')},gblur=sigma=14[g];" \
+           f"[a2][g]blend=all_mode=screen:all_opacity=0.55[c];" \
+           f"[c]{both('text')},format=yuv420p[v]"
     subprocess.run(["ffmpeg", "-y", "-loglevel", "error", "-i", src, "-filter_complex", glow,
                     "-map", "[v]", "-map", "0:a?", "-c:v", "libx264", "-crf", "18", "-preset", "slow",
-                    "-pix_fmt", "yuv420p", "-c:a", "aac", "-b:a", "192k", "-movflags", "+faststart", dst],
+                    "-pix_fmt", "yuv420p", "-af", "loudnorm=I=-16:TP=-1.5:LRA=11", "-ar", "48000",
+                    "-c:a", "aac", "-b:a", "192k", "-movflags", "+faststart", dst],
                    check=True)
     print("captioned:", dst)
 
