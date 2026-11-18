@@ -124,7 +124,7 @@ function placeEyes(look,lidAmt){for(const E of EYES){const p=surfacePoint(E.s*FA
   E.g.position.copy(p).addScaledVector(n,-0.07);E.g.lookAt(E.g.position.clone().add(n));
   E.holder.rotation.set(-look.y,look.x,0);
   // upper lid rotates down from the top (0 = open, 1 = closed); grumpy lids slant inward
-  E.lid.rotation.set(Math.PI/2*0+ (-1.25+lidAmt*1.25)*-1, 0, E.s*0.22*FACE.brow);E.lid.rotation.x=-(Math.PI/2)+ (0.55+lidAmt*1.0);
+  E.lid.rotation.set(Math.PI/2*0+ (-1.25+lidAmt*1.25)*-1, 0, E.s*0.22*FACE.brow);E.lid.rotation.x=-1.25+lidAmt*2.4;
   E.lowLid.rotation.x=0.15;}}
 // stubby arms with little hands
 function makeArm(s){const g=new THREE.Group();
