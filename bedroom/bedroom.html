@@ -139,13 +139,13 @@ function duvet(t){const br=Math.sin(t*2*Math.PI/4.8)*2.6;
  const sh=X.createRadialGradient(505,1140,10,505,1150,170);sh.addColorStop(0,'rgba(255,250,248,.35)');sh.addColorStop(1,'rgba(255,250,248,0)');X.fillStyle=sh;X.fillRect(330,1000,360,360);
  const hp=X.createRadialGradient(830,1150,10,830,1160,200);hp.addColorStop(0,'rgba(255,250,248,.28)');hp.addColorStop(1,'rgba(255,250,248,0)');X.fillStyle=hp;X.fillRect(620,960,420,400);
  for(const [a,b,c,d,w,al] of [[[560,1440],[560,1560],[550,1700],[520,1920],30,.15],[[660,1190],[690,1330],[760,1480],[780,1920],38,.17],[[930,1140],[960,1300],[1020,1420],[1100,1480],26,.12]]){
-  X.strokeStyle=`rgba(80,55,70,${al})`;X.lineWidth=w;X.lineCap='round';X.beginPath();X.moveTo(a[0],a[1]);X.bezierCurveTo(b[0],b[1],c[0],c[1],d[0],d[1]);X.stroke();
+  X.strokeStyle=`rgba(80,55,70,${al})`;X.lineWidth=w;X.lineCap='butt';X.beginPath();X.moveTo(a[0],a[1]);X.bezierCurveTo(b[0],b[1],c[0],c[1],d[0],d[1]);X.stroke();
   X.strokeStyle=`rgba(255,245,245,${al*0.85})`;X.lineWidth=w*0.32;X.beginPath();X.moveTo(a[0]-w*0.5,a[1]);X.bezierCurveTo(b[0]-w*0.5,b[1],c[0]-w*0.5,c[1],d[0]-w*0.5,d[1]);X.stroke();}
  X.restore();
  // folded-over top edge of the duvet
  X.strokeStyle='rgba(255,248,244,.65)';X.lineWidth=4;X.beginPath();X.moveTo(398,1320);X.bezierCurveTo(406,1270,410,1230,414,1196);X.bezierCurveTo(418,1150,440,1112-br,500,1104-br);X.bezierCurveTo(560,1110-br,610,1140-br*0.5,660,1170);X.bezierCurveTo(710,1190,740,1140,800,1110);X.bezierCurveTo(870,1080,950,1100,1000,1130);X.stroke();}
 // ---------- phone held loosely in her hand, lying on the bed by her chin ----------
-const PH={x:292,y:1286,u:[0.93,-0.13],v:[0.30,0.43],w:118,h:240};
+const PH={x:236,y:1262,u:[0.95,-0.1],v:[0.22,0.40],w:118,h:240};
 function phonePt(a,b){return [PH.x+PH.u[0]*a+PH.v[0]*b,PH.y+PH.u[1]*a+PH.v[1]*b];}
 function buzz(t){if(phoneState(t)<2)return [0,0];const on=((t-12.5)%0.8)<0.45;return on?[Math.sin(t*190)*1.6,Math.cos(t*170)*1.2]:[0,0];}
 function phone(t){const st=phoneState(t);const [sx,sy]=buzz(t);
@@ -159,7 +159,7 @@ function phone(t){const st=phoneState(t);const [sx,sy]=buzz(t);
  else{const wake=st==1?ease((t-8.6)/0.25):1;
   const g=X.createLinearGradient(0,0,0,PH.h);g.addColorStop(0,st==2?'#2b3c63':'#1d2a48');g.addColorStop(1,st==2?'#6a4f86':'#3a2f55');X.fillStyle=g;X.globalAlpha=wake;X.fillRect(...sc);
   X.fillStyle='#fff';X.textAlign='center';X.textBaseline='middle';
-  if(st==1){X.font='300 44px sans-serif';X.fillText('1:47',PH.w/2,60);X.font='11px sans-serif';X.fillStyle='rgba(255,255,255,.75)';X.fillText('Thursday, 19 November',PH.w/2,92);
+  if(st==1){X.font='300 44px sans-serif';X.fillText('1:47',PH.w/2,60);X.font='9.5px sans-serif';X.fillStyle='rgba(255,255,255,.75)';X.fillText('Thursday 19 Nov',PH.w/2,92);
    X.fillStyle='rgba(255,255,255,.14)';X.beginPath();X.roundRect(12,140,PH.w-24,32,9);X.fill();X.fillStyle='rgba(255,255,255,.72)';X.font='11px sans-serif';X.fillText('no new messages',PH.w/2,156);}
   else{const pu=0.5+0.5*Math.sin((t-12.5)*6);X.font='11px sans-serif';X.fillStyle='rgba(255,255,255,.72)';X.fillText('incoming call',PH.w/2,42);
    X.font='600 30px sans-serif';X.fillStyle='#fff';X.fillText('him',PH.w/2-10,76);
@@ -221,6 +221,6 @@ function caption(t){
   for(let k=0;k<2;k++){X.fillText('he always calls',x,y);X.shadowBlur=0;}X.restore();heart(x+272,y-4,22,b);}}
 window.draw=function(t){if(!STATIC)buildStatic();const z=1.42+0.1*ease(t/18),F=[430,1270],ox=S*(F[0]-F[0]*z),oy=S*(F[1]-F[1]*z);
  X.setTransform(1,0,0,1,0,0);X.fillStyle='#000';X.fillRect(0,0,1440,2560);X.setTransform(z/SR,0,0,z/SR,ox,oy);X.drawImage(STATIC,0,0);X.setTransform(S*z,0,0,S*z,ox,oy);
- windowRain(t);fairy(t);head(t);duvet(t);hand(t);phone(t);phoneLight(t);X.setTransform(S,0,0,S,0,0);grade(t);caption(t);};
+ windowRain(t);fairy(t);head(t);duvet(t);phone(t);phoneLight(t);X.setTransform(S,0,0,S,0,0);grade(t);caption(t);};
 draw(0);
 </script></body></html>

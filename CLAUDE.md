@@ -13,6 +13,12 @@ Every video must be better than the last. Before scheduling anything, review it 
 - **Sound:** original music with the ambience in sync with the picture (thunder after the flash, the creak when the door swings).
 - Check stills at full size from several moments, fix every flaw, re-check. If it isn't spectacular yet, keep improving it rather than posting it. Fewer, better videos beat more, weaker ones.
 
+## Lessons from Charity's feedback (apply every time)
+- **Physical logic:** every element must make sense in the story's world. If someone is snug under a duvet, their hands are inside too (a hand poking out looks like a hole in the duvet). Ask "would this really look like that?" for every body part, object and light.
+- Kitchen dance: clothes must look worn (drape, folds), legs one tone, pan sitting on the burner.
+- Window watcher: slim enough to fit the window; chin resting on hands, not hands over the mouth.
+- Text on phone screens/signs must fit (no cut-off words). No stray blobs from stroke caps.
+
 ## The channels
 
 | Channel | Metricool brand (blogId) | YouTube | What it is |
