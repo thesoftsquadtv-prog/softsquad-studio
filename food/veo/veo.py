@@ -105,7 +105,7 @@ def one_take(i, model, res, dur, outdir, log):
     body = {"model": model, "input": PROMPT + (VARIANT if i % 2 else ""),
             "response_format": {"type": "video", "aspect_ratio": "9:16", "duration": f"{dur}s",
                                 "resolution": res, "delivery": "uri"},
-            "background": False, "store": False, "stream": False}
+            "background": False, "store": True, "stream": False}  # URI delivery requires store=true
     t0 = time.time()
     try:  # no automatic retry: a timed-out call may still be billed
         d = call("POST", f"{BASE}/interactions", body, timeout=900)
