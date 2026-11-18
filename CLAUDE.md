@@ -33,6 +33,7 @@ Charity: "make sure things that are out of place should be looked out for."
 | The Soft Squad | 7950757 | @thesoftsquadtv (UCqB4THOyaFT8sijRU3zO_YQ) + TikTok @thesoftsquadtv | Animated young-adult friends (Milo, Kemi, Juno, Amara, cat Toffee). Relatable list Shorts ("Things That Are Actually Okay" is the benchmark hit), storylines (Milo's crush), lofi long-form. |
 | safe space after dark | 8203121 | @safespaceafterdark (UCXCvuTo7jABH4W0nFqcZl9A) | Late-night emotional moments: love, heartbreak, missing someone, healing, being held. Lowercase first-person caption hook, soft italic serif (Cormorant Garamond italic). |
 | Soft Ambience | 8203178 | @softambiencehours (UChc-SW4ldZkAWd3NmrBFW1A) | Cosy homes in every kind of weather. Each house has its own little story (someone at a window, a door swinging, a lantern). Short loops (20–60 s) that loop seamlessly. |
+| Crumb Club | (being set up, 4th brand) | (being created) | Funny photoreal food world: alive food with little dramas, humans never notice (kitchen-chaos skits, food moments, food in love). Made with Gemini image + Omni video. **Read `food/CRUMB_CLUB.md`**; needs the Default cloud environment. |
 
 Timezone for all brands: Africa/Lagos. Best posting window so far: US evening = 00:30–03:00 Lagos.
 Slots: Soft Squad already posts 19:00 daily (YouTube + TikTok) through 27 Nov and 1–2 Dec (gap 28–30 Nov) — add its 2nd daily post around 01:00 and fill gaps. safe space after dark ~01:00, Soft Ambience ~01:30. Always check getScheduledPosts first so nothing double-posts.
