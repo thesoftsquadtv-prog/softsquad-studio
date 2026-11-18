@@ -159,12 +159,13 @@ def caption(src, dst):
         s = (f"drawtext=fontfile={ttf}:text='{txt}':fontsize=82:fontcolor={c}:"
              f"x=(w-text_w)/2:y={y}:alpha='{alpha}'")
         return s
-    # warm glow layer (blurred, warm) under crisp soft-white text
-    glow = f"[0:v]scale=1080:1920:flags=lanczos,setsar=1,split[a][b];" \
+    # warm glow layer (blurred, warm) under crisp soft-white text; blend in RGB (gbrp),
+    # blending YUV planes shifts the chroma and turns the whole frame purple
+    glow = f"[0:v]scale=1080:1920:flags=lanczos,setsar=1,format=gbrp,split[a][b];" \
            f"[b]drawbox=c=black@1:t=fill,{line('me after a hot shower', 300, 1)},{line('on a long week', 400, 1)}," \
-           f"gblur=sigma=14,colorchannelmixer=aa=0.9[g];" \
+           f"gblur=sigma=14[g];" \
            f"[a][g]blend=all_mode=screen:all_opacity=0.55[c];" \
-           f"[c]{line('me after a hot shower', 300, 0)},{line('on a long week', 400, 0)}[v]"
+           f"[c]{line('me after a hot shower', 300, 0)},{line('on a long week', 400, 0)},format=yuv420p[v]"
     subprocess.run(["ffmpeg", "-y", "-loglevel", "error", "-i", src, "-filter_complex", glow,
                     "-map", "[v]", "-map", "0:a?", "-c:v", "libx264", "-crf", "18", "-preset", "slow",
                     "-pix_fmt", "yuv420p", "-c:a", "aac", "-b:a", "192k", "-movflags", "+faststart", dst],
