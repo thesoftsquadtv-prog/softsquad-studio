@@ -215,13 +215,17 @@ def _img_cost(u):
 
 
 def frame(dst, instruction=None, prev=None):
-    """Make (or, with prev = previous interaction id, edit) a 2K 9:16 start frame."""
+    """Make (or, with prev = previous interaction id, edit) a still: 2K 9:16 by default
+    (env IMG_AR e.g. 16:9 / 1:1, IMG_SIZE 1K/2K/4K). instruction='@file.txt' reads the prompt from a file."""
+    if instruction and instruction.startswith("@"):
+        instruction = open(instruction[1:]).read().strip()
     ok, msg = probe(IMG_MODEL)
     if not ok:
         sys.exit(f"{IMG_MODEL} not available (nothing spent): {msg}")
     body = {"model": IMG_MODEL, "input": instruction or FRAME_PROMPT,
-            "response_format": {"type": "image", "mime_type": "image/jpeg", "aspect_ratio": "9:16",
-                                "image_size": "2K"}}
+            "response_format": {"type": "image", "mime_type": "image/jpeg",
+                                "aspect_ratio": os.environ.get("IMG_AR", "9:16"),
+                                "image_size": os.environ.get("IMG_SIZE", "2K")}}
     if prev:
         body["previous_interaction_id"] = prev
     d = _interact(body)
