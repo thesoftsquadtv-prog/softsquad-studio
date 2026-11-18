@@ -4,3 +4,6 @@
 parts/
 __pycache__/
 *.tmp.*
+*.jpg
+!brand/*.jpg
+bedroom/f*.png
