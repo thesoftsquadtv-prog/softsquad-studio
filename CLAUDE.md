@@ -69,7 +69,8 @@ Slots: Soft Squad already posts 19:00 daily (YouTube + TikTok) through 27 Nov an
 2. Commit it to `thesoftsquadtv-prog/softsquad-media` under `v/` and push.
 3. Public link: `https://raw.githubusercontent.com/thesoftsquadtv-prog/softsquad-media/main/v/<file>.mp4`
 4. `createScheduledPost` with that link (`youtubeData.type: "short"`, category ENTERTAINMENT or PEOPLE_BLOGS). Metricool copies the file to its own storage on scheduling (the response media URL becomes static.metricool.com), so the GitHub copy can then be deleted.
-5. Housekeeping: delete scheduled files from `v/` weekly, and when the repo gets large, replace history with a fresh orphan commit (force-push) so it stays small.
+5. **Queue:** if `softsquad-media/queue/` has `*.mp4` + matching `*.json` (left by runs without Metricool, e.g. Crumb Club), schedule each with the JSON's fields (YouTube short, madeForKids false, isAiGeneratedContent true for Crumb Club), using the raw URL of the queued file; if its date has passed, use the next free slot for that brand. Then delete both files and push.
+6. Housekeeping: delete scheduled files from `v/` weekly, and when the repo gets large, replace history with a fresh orphan commit (force-push) so it stays small.
 Note: GitHub releases are not allowed from these sessions; repos can't be created from here (only used).
 
 ## Pipelines (this repo)

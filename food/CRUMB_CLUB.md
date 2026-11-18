@@ -53,6 +53,8 @@ Goal: people laugh, feel good, share and tag a friend.
 5. Log the post (date, title, idea, cost, review notes) by appending to `food/crumb_log.md` in softsquad-studio, commit + push. Never commit the key.
 6. Report to Charity in 3–4 lines (SendUserMessage / push): what was posted and when, the cost, anything she must do.
 
+**If Metricool tools aren't available in your run** (no `createScheduledPost`): don't stop. Push the finished MP4 to `softsquad-media/queue/crumb-YYYYMMDD-slug.mp4` plus a matching `.json` with `{"blogId":8212990,"publicationDate":"YYYY-MM-DDT02:00:00","timezone":"Africa/Lagos","title":...,"text":...,"category":"COMEDY"}`, log it as "queued", and say so in the report. The daily manager (which has Metricool) schedules anything in `queue/` on its next run.
+
 ## Learning loop
 Every run: check Metricool analytics for brand 8212990 (lags 2–3 days) and the public view counts on @thecrumbclub. Note in `crumb_log.md` which kinds/foods/titles get the most views, likes and comments, and lean into them. Spend cap $3/day (Charity can raise it).
 
