@@ -1,0 +1,193 @@
+<!doctype html><html><head><meta charset="utf-8">
+<style>
+@font-face{font-family:'Corm';font-style:italic;font-weight:500;src:url(corm.woff2) format('woff2')}
+html,body{margin:0;background:#000;overflow:hidden}
+#gl,#ui{position:absolute;left:0;top:0;width:1440px;height:2560px}
+</style></head><body>
+<canvas id="gl" width="1440" height="2560"></canvas><canvas id="ui" width="1440" height="2560"></canvas>
+<script src="three.min.js"></script>
+<script>
+// Food channel test: "Dough" kneads himself. Vertical 1440x2560. draw(t) renders one frame.
+const W=1440,H=2560;
+const renderer=new THREE.WebGLRenderer({canvas:document.getElementById('gl'),antialias:true,preserveDrawingBuffer:true});
+renderer.setPixelRatio(1);renderer.setSize(W,H,false);
+renderer.outputColorSpace=THREE.SRGBColorSpace;renderer.toneMapping=THREE.ACESFilmicToneMapping;renderer.toneMappingExposure=1.05;
+renderer.shadowMap.enabled=true;renderer.shadowMap.type=THREE.PCFSoftShadowMap;
+const scene=new THREE.Scene();
+const camera=new THREE.PerspectiveCamera(30,W/H,0.1,100);
+const ease=u=>u<0?0:u>1?1:u*u*(3-2*u), clamp=(v,a,b)=>Math.max(a,Math.min(b,v)), lerp=(a,b,u)=>a+(b-a)*u;
+function rng(seed){let s=(seed*2654435761)>>>0||1;return()=>{s^=s<<13;s>>>=0;s^=s>>17;s^=s<<5;s>>>=0;return s/4294967296}}
+function canvasTex(w,h,fn,repeat){const c=document.createElement('canvas');c.width=w;c.height=h;fn(c.getContext('2d'),w,h);const t=new THREE.CanvasTexture(c);t.colorSpace=THREE.SRGBColorSpace;if(repeat){t.wrapS=t.wrapT=THREE.RepeatWrapping;t.repeat.set(...repeat);}t.anisotropy=8;return t;}
+// smooth value noise for the dough's lumps and pores
+const PERM=new Uint8Array(512);{const r=rng(7);const p=[...Array(256).keys()];for(let i=255;i>0;i--){const j=(r()*(i+1))|0;[p[i],p[j]]=[p[j],p[i]];}for(let i=0;i<512;i++)PERM[i]=p[i&255];}
+function grad(h,x,y,z){const u=h<8?x:y,v=h<4?y:(h==12||h==14?x:z);return((h&1)?-u:u)+((h&2)?-v:v);}
+function noise3(x,y,z){const X=Math.floor(x)&255,Y=Math.floor(y)&255,Z=Math.floor(z)&255;x-=Math.floor(x);y-=Math.floor(y);z-=Math.floor(z);const f=t=>t*t*t*(t*(t*6-15)+10);const u=f(x),v=f(y),w=f(z);
+ const A=PERM[X]+Y,AA=PERM[A]+Z,AB=PERM[A+1]+Z,B=PERM[X+1]+Y,BA=PERM[B]+Z,BB=PERM[B+1]+Z;
+ return lerp(lerp(lerp(grad(PERM[AA]&15,x,y,z),grad(PERM[BA]&15,x-1,y,z),u),lerp(grad(PERM[AB]&15,x,y-1,z),grad(PERM[BB]&15,x-1,y-1,z),u),v),lerp(lerp(grad(PERM[AA+1]&15,x,y,z-1),grad(PERM[BA+1]&15,x-1,y,z-1),u),lerp(grad(PERM[AB+1]&15,x,y-1,z-1),grad(PERM[BB+1]&15,x-1,y-1,z-1),u),v),w);}
+
+// ---------------- the kitchen ----------------
+// painted, softly out-of-focus background: window light, shelves, jars, a plant
+const bgTex=canvasTex(1024,1600,(q,w,h)=>{
+ const g=q.createLinearGradient(0,0,0,h);g.addColorStop(0,'#c9a27a');g.addColorStop(0.55,'#8a6346');g.addColorStop(1,'#4a3226');q.fillStyle=g;q.fillRect(0,0,w,h);
+ const wl=q.createRadialGradient(250,420,20,250,420,520);wl.addColorStop(0,'rgba(255,240,205,.95)');wl.addColorStop(0.5,'rgba(255,220,170,.4)');wl.addColorStop(1,'rgba(255,220,170,0)');q.fillStyle=wl;q.fillRect(0,0,w,h);
+ q.fillStyle='rgba(255,246,225,.9)';q.fillRect(90,170,330,470);q.fillStyle='rgba(120,90,60,.7)';q.fillRect(245,170,14,470);q.fillRect(90,395,330,12);
+ q.fillStyle='#5b3f2c';q.fillRect(560,520,460,22);q.fillRect(560,860,460,22);
+ const r=rng(3);for(let k=0;k<7;k++){const x=590+k*62,hh=60+r()*70;q.fillStyle=['#d8c7a8','#b98a5a','#e9e1d1','#9a6b45'][k%4];q.beginPath();q.roundRect(x,520-hh,46,hh,8);q.fill();}
+ for(let k=0;k<6;k++){const x=600+k*70,hh=50+r()*90;q.fillStyle=['#7a5a3e','#cbb79a','#8c9a7a'][k%3];q.beginPath();q.roundRect(x,860-hh,52,hh,10);q.fill();}
+ q.fillStyle='#a8754a';q.beginPath();q.moveTo(120,1040);q.lineTo(250,1040);q.lineTo(235,1140);q.lineTo(135,1140);q.fill();
+ for(let k=0;k<14;k++){q.save();q.translate(185,1040);q.rotate(-1.5+k*0.22);q.fillStyle=k%2?'#5f8a4e':'#4b7340';q.beginPath();q.ellipse(0,-70,18,70,0,0,6.28);q.fill();q.restore();}
+ q.fillStyle='#3e2c22';q.fillRect(0,1150,w,450);
+ q.filter='blur(0px)';});
+bgTex.colorSpace=THREE.SRGBColorSpace;
+const bgCanvas=bgTex.image;{const c2=document.createElement('canvas');c2.width=1024;c2.height=1600;const q=c2.getContext('2d');q.filter='blur(22px)';q.drawImage(bgCanvas,0,0);bgTex.image=c2;bgTex.needsUpdate=true;}
+const bg=new THREE.Mesh(new THREE.PlaneGeometry(14,21.9),new THREE.MeshBasicMaterial({map:bgTex}));bg.position.set(0,3.2,-9);scene.add(bg);
+// wooden counter with flour dusting
+const woodTex=canvasTex(2048,2048,(q,w,h)=>{const r=rng(11);q.fillStyle='#8b5a36';q.fillRect(0,0,w,h);
+ for(let p=0;p<6;p++){const y0=p*h/6;const base=['#8a5835','#94603a','#7d5031','#9a6740','#86552f','#8f5d38'][p];q.fillStyle=base;q.fillRect(0,y0,w,h/6);
+  for(let k=0;k<160;k++){q.strokeStyle=`rgba(${r()<0.5?'60,34,18':'170,120,80'},${0.08+r()*0.12})`;q.lineWidth=1+r()*3;const yy=y0+r()*h/6;q.beginPath();q.moveTo(0,yy);for(let x=0;x<=w;x+=64)q.lineTo(x,yy+Math.sin(x*0.004+k)*6+ (r()-0.5)*3);q.stroke();}
+  q.fillStyle='rgba(40,22,12,.6)';q.fillRect(0,y0,w,4);}
+ for(let k=0;k<30;k++){q.fillStyle='rgba(50,28,14,.35)';q.beginPath();q.ellipse(r()*w,r()*h,6+r()*14,3+r()*6,r()*3,0,6.28);q.fill();}},[1,1]);
+const flourTex=canvasTex(2048,2048,(q,w,h)=>{const r=rng(5);q.clearRect(0,0,w,h);
+ for(let k=0;k<22;k++){const x=w*0.5+(r()-0.5)*w*0.6,y=h*0.5+(r()-0.5)*h*0.5,rr=80+r()*240;const g=q.createRadialGradient(x,y,0,x,y,rr);g.addColorStop(0,'rgba(255,252,245,.28)');g.addColorStop(1,'rgba(255,252,245,0)');q.fillStyle=g;q.fillRect(x-rr,y-rr,rr*2,rr*2);}
+ for(let k=0;k<7000;k++){const a=r()*6.28,d=Math.pow(r(),1.6)*w*0.48;const x=w*0.5+Math.cos(a)*d,y=h*0.5+Math.sin(a)*d*0.85;q.fillStyle=`rgba(255,253,248,${0.12+r()*0.4})`;q.fillRect(x,y,1+r()*2.5,1+r()*2.5);}},null);
+flourTex.colorSpace=THREE.SRGBColorSpace;
+const counter=new THREE.Mesh(new THREE.PlaneGeometry(12,12),new THREE.MeshStandardMaterial({map:woodTex,roughness:0.78,metalness:0}));counter.rotation.x=-Math.PI/2;counter.receiveShadow=true;scene.add(counter);
+const flour=new THREE.Mesh(new THREE.PlaneGeometry(4.6,3.4),new THREE.MeshStandardMaterial({map:flourTex,transparent:true,roughness:1,depthWrite:false}));flour.rotation.x=-Math.PI/2;flour.position.set(0,0.003,0.5);flour.receiveShadow=true;scene.add(flour);
+// soft contact shadow where he sits on the wood (ambient occlusion)
+const aoTex=canvasTex(512,512,(q,w,h)=>{const g=q.createRadialGradient(w/2,h/2,0,w/2,h/2,w/2);g.addColorStop(0,'rgba(30,14,6,.85)');g.addColorStop(0.55,'rgba(30,14,6,.45)');g.addColorStop(1,'rgba(30,14,6,0)');q.fillStyle=g;q.fillRect(0,0,w,h);},null);
+const ao=new THREE.Mesh(new THREE.PlaneGeometry(3.4,2.5),new THREE.MeshBasicMaterial({map:aoTex,transparent:true,depthWrite:false}));ao.rotation.x=-Math.PI/2;ao.position.set(0,0.006,0.05);scene.add(ao);
+// counter front edge
+const edge=new THREE.Mesh(new THREE.BoxGeometry(12,0.6,0.3),new THREE.MeshStandardMaterial({color:0x5e3a22,roughness:0.8}));edge.position.set(0,-0.3,3.4);scene.add(edge);
+
+// ---------------- light ----------------
+scene.add(new THREE.HemisphereLight(0xffe8cf,0x5a3a26,0.55));
+const key=new THREE.DirectionalLight(0xffe2b8,2.6);key.position.set(-3.5,5,3.2);key.castShadow=true;key.shadow.mapSize.set(2048,2048);key.shadow.camera.left=-3;key.shadow.camera.right=3;key.shadow.camera.top=3;key.shadow.camera.bottom=-3;key.shadow.radius=6;key.shadow.bias=-0.0004;key.shadow.normalBias=0.035;scene.add(key);
+const rim=new THREE.DirectionalLight(0xfff0dc,1.4);rim.position.set(2.5,3,-4);scene.add(rim);
+const fill=new THREE.PointLight(0xffd7b0,8,12,2);fill.position.set(2.5,1.6,3.5);scene.add(fill);
+
+// ---------------- Dough ----------------
+const poreTex=canvasTex(1024,1024,(q,w,h)=>{const r=rng(9);q.fillStyle='#808080';q.fillRect(0,0,w,h);
+ for(let k=0;k<5000;k++){q.fillStyle=`rgba(${r()<0.5?'40,40,40':'220,220,220'},${0.05+r()*0.15})`;q.beginPath();q.arc(r()*w,r()*h,0.6+r()*2.2,0,6.28);q.fill();}
+ for(let k=0;k<160;k++){q.strokeStyle='rgba(60,60,60,.12)';q.lineWidth=1+r()*2;q.beginPath();const x=r()*w,y=r()*h;q.moveTo(x,y);q.quadraticCurveTo(x+(r()-0.5)*60,y+(r()-0.5)*60,x+(r()-0.5)*90,y+(r()-0.5)*90);q.stroke();}},[3,3]);
+poreTex.colorSpace=THREE.NoColorSpace;
+const doughColor=canvasTex(1024,1024,(q,w,h)=>{const r=rng(21);q.fillStyle='#f0dfc0';q.fillRect(0,0,w,h);
+ for(let k=0;k<70;k++){const x=r()*w,y=r()*h*0.55,rr=40+r()*140;const g=q.createRadialGradient(x,y,0,x,y,rr);g.addColorStop(0,'rgba(255,253,248,.55)');g.addColorStop(1,'rgba(255,253,248,0)');q.fillStyle=g;q.fillRect(x-rr,y-rr,rr*2,rr*2);}
+ for(let k=0;k<9000;k++){q.fillStyle=`rgba(255,255,252,${0.2+r()*0.5})`;q.fillRect(r()*w,r()*h*0.6,1+r()*2,1+r()*2);}
+ for(let k=0;k<40;k++){const x=r()*w,y=h*0.6+r()*h*0.4,rr=30+r()*90;const g=q.createRadialGradient(x,y,0,x,y,rr);g.addColorStop(0,'rgba(210,180,135,.25)');g.addColorStop(1,'rgba(210,180,135,0)');q.fillStyle=g;q.fillRect(x-rr,y-rr,rr*2,rr*2);}},null);
+const doughMat=new THREE.MeshPhysicalMaterial({map:doughColor,color:0xffffff,roughness:0.82,metalness:0,bumpMap:poreTex,bumpScale:0.6,sheen:1,sheenRoughness:0.8,sheenColor:new THREE.Color(0xfff6e8),clearcoat:0.06,clearcoatRoughness:0.6});
+const SEG_U=220,SEG_V=160;
+const bodyGeo=new THREE.SphereGeometry(1,SEG_U,SEG_V);
+const BASE=bodyGeo.attributes.position.array.slice();
+const body=new THREE.Mesh(bodyGeo,doughMat);body.castShadow=true;body.receiveShadow=true;scene.add(body);
+const SX=1.12,SY=0.98,SZ=1.0,FLOOR=0.0;
+// face parameters change over time
+const FACE={eyeU:0.255,eyeV:0.17,brow:1,smile:-0.25,push:0,squash:0,lean:0,dentL:0,dentR:0};
+const gauss=(x,s)=>Math.exp(-(x*x)/(2*s*s));
+function surfaceR(nx,ny,nz){
+ const u=Math.atan2(nx,nz),v=Math.asin(clamp(ny,-1,1));let r=1;
+ r+=noise3(nx*2.2+3,ny*2.2,nz*2.2)*0.045+noise3(nx*5,ny*5,nz*5)*0.012;            // soft dough lumps
+ if(nz>0){const front=clamp(nz,0,1);
+  for(const s of [-1,1]){const du=u-s*FACE.eyeU,dv=v-FACE.eyeV;
+   r-=0.10*gauss(du,0.11)*gauss(dv,0.10)*front;                                   // eye sockets
+   const vb=FACE.eyeV+0.19-FACE.brow*0.2*(0.32-Math.abs(u))*(Math.abs(u)<0.32?1:0.2); // grumpy brow ridge, low on the inside
+   r+=0.055*gauss(v-vb,0.045)*gauss(Math.abs(u)-0.25,0.13)*front;
+   r+=0.05*gauss(u-s*0.26,0.1)*gauss(v+0.06,0.08)*front;                             // round cheeks
+   const dent=s<0?FACE.dentL:FACE.dentR;r-=dent*0.12*gauss(u-s*0.18,0.2)*gauss(v+0.42,0.16)*front;} // belly dents where he kneads
+  r+=0.03*gauss(u,0.06)*gauss(v-0.06,0.06)*front;                                     // little nose
+  const vm=-0.10+FACE.smile*2.2*u*u;r-=0.024*gauss(v-vm,0.012)*gauss(u,0.075)*front;}    // small mouth crease
+ return r;}
+function updateBody(){const pos=bodyGeo.attributes.position.array;const sq=FACE.squash;
+ for(let i=0;i<pos.length;i+=3){let nx=BASE[i],ny=BASE[i+1],nz=BASE[i+2];const r=surfaceR(nx,ny,nz);
+  let x=nx*r*SX*(1+sq*0.12),y=ny*r*SY*(1-sq*0.14),z=nz*r*SZ*(1+sq*0.1);
+  y+=0.92; // sit on the counter
+  if(y<0.42){const k=clamp((0.42-y)/0.5,0,1);y=0.42-(0.42-y)*0.84;const sp=1+Math.pow(k,1.6)*0.42;x*=sp;z*=1+Math.pow(k,1.6)*0.3;} // soft spread where he presses on the counter
+  if(y<0.004)y=0.004;
+  x+=FACE.lean*y*0.12;
+  pos[i]=x;pos[i+1]=y;pos[i+2]=z;}
+ bodyGeo.attributes.position.needsUpdate=true;bodyGeo.computeVertexNormals();}
+function surfacePoint(u,v){const nx=Math.sin(u)*Math.cos(v),ny=Math.sin(v),nz=Math.cos(u)*Math.cos(v);const r=surfaceR(nx,ny,nz);const sq=FACE.squash;
+ return new THREE.Vector3(nx*r*SX*(1+sq*0.12)+FACE.lean*(ny*r*SY*(1-sq*0.14)+0.92)*0.12,ny*r*SY*(1-sq*0.14)+0.92,nz*r*SZ*(1+sq*0.1));}
+// eyes: glossy, warm brown, with a dough eyelid that can droop and blink
+const irisTex=canvasTex(512,512,(q,w,h)=>{q.fillStyle='#f6efe6';q.fillRect(0,0,w,h);
+ const cx=w/2,cy=h/2;const g=q.createRadialGradient(cx,cy,10,cx,cy,120);g.addColorStop(0,'#8a5a3a');g.addColorStop(0.55,'#5c3722');g.addColorStop(1,'#2e1a10');q.fillStyle=g;q.beginPath();q.arc(cx,cy,118,0,6.28);q.fill();
+ q.strokeStyle='rgba(200,150,100,.35)';q.lineWidth=2;for(let k=0;k<60;k++){const a=k/60*6.28;q.beginPath();q.moveTo(cx+Math.cos(a)*48,cy+Math.sin(a)*48);q.lineTo(cx+Math.cos(a)*112,cy+Math.sin(a)*112);q.stroke();}
+ q.fillStyle='#120a06';q.beginPath();q.arc(cx,cy,52,0,6.28);q.fill();q.strokeStyle='#1a0e08';q.lineWidth=8;q.beginPath();q.arc(cx,cy,116,0,6.28);q.stroke();},null);
+const eyeMat=new THREE.MeshPhysicalMaterial({map:irisTex,roughness:0.08,clearcoat:1,clearcoatRoughness:0.03});
+const EYES=[];
+for(const s of [-1,1]){const g=new THREE.Group();const ball=new THREE.Mesh(new THREE.SphereGeometry(0.15,64,48),eyeMat);ball.rotation.y=-Math.PI/2;
+ // the sphere's texture centre faces +x by default; rotate so the iris looks forward (+z)
+ const holder=new THREE.Group();holder.add(ball);g.add(holder);
+ const lid=new THREE.Mesh(new THREE.SphereGeometry(0.162,64,32,0,Math.PI*2,0,Math.PI/2),doughMat);lid.castShadow=true;g.add(lid);
+ const lowLid=new THREE.Mesh(new THREE.SphereGeometry(0.158,64,32,0,Math.PI*2,Math.PI*0.66,Math.PI*0.34),doughMat);g.add(lowLid);
+ scene.add(g);EYES.push({g,holder,lid,lowLid,s});}
+function placeEyes(look,lidAmt){for(const E of EYES){const p=surfacePoint(E.s*FACE.eyeU,FACE.eyeV);const n=p.clone().sub(new THREE.Vector3(FACE.lean*1.0*0.12,0.92,0)).normalize();
+  E.g.position.copy(p).addScaledVector(n,-0.07);E.g.lookAt(E.g.position.clone().add(n));
+  E.holder.rotation.set(-look.y,look.x,0);
+  // upper lid rotates down from the top (0 = open, 1 = closed); grumpy lids slant inward
+  E.lid.rotation.set(Math.PI/2*0+ (-1.25+lidAmt*1.25)*-1, 0, E.s*0.22*FACE.brow);E.lid.rotation.x=-(Math.PI/2)+ (0.55+lidAmt*1.0);
+  E.lowLid.rotation.x=0.15;}}
+// stubby arms with little hands
+function makeArm(s){const g=new THREE.Group();
+ const arm=new THREE.Mesh(new THREE.SphereGeometry(1,64,48),doughMat);arm.scale.set(0.2,0.17,0.36);arm.castShadow=true;g.add(arm);
+ const hand=new THREE.Group();const palm=new THREE.Mesh(new THREE.SphereGeometry(1,48,32),doughMat);palm.scale.set(0.15,0.1,0.13);palm.castShadow=true;hand.add(palm);
+ for(let k=0;k<3;k++){const f=new THREE.Mesh(new THREE.SphereGeometry(1,32,24),doughMat);f.scale.set(0.05,0.045,0.07);f.position.set(-s*(0.07-k*0.07)*0.9+(-s*0.02),-0.02,0.1);f.castShadow=true;hand.add(f);}
+ hand.position.set(-s*0.08,-0.02,0.3);g.add(hand);scene.add(g);return {g,arm,hand,s};}
+const ARMS=[makeArm(-1),makeArm(1)];
+function placeArms(t,push){for(const A of ARMS){const s=A.s;const p=A.s<0?push.l:push.r;
+  const shoulder=surfacePoint(s*0.62,-0.34);
+  A.g.position.copy(shoulder).add(new THREE.Vector3(-s*0.04,0,0.02));
+  A.g.rotation.set(0.3,-s*(1.05+p*0.3),-s*0.2);
+  A.g.position.z+=p*0.06;A.g.position.x-=s*p*0.12;A.g.position.y-=p*0.03;}}
+// flour puffs
+const puffTex=canvasTex(128,128,(q,w,h)=>{const g=q.createRadialGradient(64,64,0,64,64,64);g.addColorStop(0,'rgba(255,255,255,1)');g.addColorStop(1,'rgba(255,255,255,0)');q.fillStyle=g;q.fillRect(0,0,w,h);},null);
+const PUFFN=260;const puffGeo=new THREE.BufferGeometry();const puffPos=new Float32Array(PUFFN*3);puffGeo.setAttribute('position',new THREE.BufferAttribute(puffPos,3));
+const puffMat=new THREE.PointsMaterial({map:puffTex,size:0.07,transparent:true,depthWrite:false,opacity:0.0,color:0xfffaf0});
+const puffs=new THREE.Points(puffGeo,puffMat);scene.add(puffs);
+const PR=rng(31);const PSEED=[...Array(PUFFN)].map(()=>[PR()-0.5,PR(),PR()-0.5,PR()]);
+
+// ---------------- the little performance ----------------
+const KNEADS=[1.8,2.9,4.0,5.1,6.2,7.3];          // pushes into his belly
+const KNEADS2=[11.8,12.9];
+function pushAt(t,list,off){let v=0;for(const k of list){const d=t-k-off;if(d>-0.25&&d<0.5)v=Math.max(v,d<0?ease((d+0.25)/0.25):1-ease(d/0.5));}return v;}
+function frame(t){
+ const pl=pushAt(t,KNEADS,0)+pushAt(t,KNEADS2,0), pr=pushAt(t,KNEADS,0.18)+pushAt(t,KNEADS2,0.18);
+ FACE.dentL=pl;FACE.dentR=pr;
+ const sigh=t<1.2?Math.sin(ease(t/1.2)*Math.PI)*0.6:0;
+ const flop=t>14.2?ease((t-14.2)/0.6):0;
+ FACE.squash=(pl+pr)*0.18+sigh*0.5+flop*0.9-(t>13.6&&t<14.2?Math.sin((t-13.6)/0.6*Math.PI)*0.25:0);
+ FACE.brow=t>14.6?lerp(1,0.4,ease((t-14.6)/0.6)):1;
+ FACE.smile=t<13?-0.28:lerp(-0.28,0.18,ease((t-13.2)/0.6));
+ FACE.lean=Math.sin(t*1.7)*0.08*(t>1.6&&t<8)+ (t>8.4&&t<11.4?0.0:0);
+ updateBody();
+ // eyes: annoyed half-lids, slow blink, then a deadpan look into the camera
+ let lid=0.42+0.04*Math.sin(t*2);
+ for(const b of [1.0,6.6,10.4]){const d=t-b;if(d>0&&d<0.35)lid=Math.max(lid,Math.sin(d/0.35*Math.PI));}
+ if(t>14.6)lid=lerp(lid,0.9,ease((t-14.6)/0.8));
+ let look={x:0,y:-0.32};                           // looking down at his belly while kneading
+ if(t>8.4&&t<11.4)look={x:0,y:lerp(-0.32,0.02,ease((t-8.4)/0.5))};  // ...then straight at you
+ if(t>=11.4)look={x:0,y:lerp(0.02,-0.32,ease((t-11.4)/0.4))};
+ if(t>14.6)look={x:0,y:-0.1};
+ placeEyes(look,lid);
+ placeArms(t,{l:pl,r:pr});
+ // flour puffs on each knead and on the final flop
+ let pa=0;const em=[...KNEADS,...KNEADS2,14.5];
+ for(let i=0;i<PUFFN;i++){const S=PSEED[i];const ev=em[i%em.length];const d=t-ev;const life=1.4;
+  if(d>0&&d<life){const u=d/life;puffPos[i*3]=S[0]*1.8*(0.4+u)+ (i%2?0.25:-0.25);puffPos[i*3+1]=0.35+S[1]*0.5+u*0.7;puffPos[i*3+2]=0.95+S[2]*0.6+u*0.3;pa=Math.max(pa,1-u);}
+  else{puffPos[i*3+1]=-5;}}
+ puffGeo.attributes.position.needsUpdate=true;puffMat.opacity=0.55*pa;
+ // camera: slow cinematic push-in, a touch of drift
+ const z=lerp(10.6,9.4,ease(t/15));camera.position.set(Math.sin(t*0.12)*0.3,1.5+0.04*Math.sin(t*0.3),z);camera.lookAt(0,1.2,0);
+ renderer.render(scene,camera);
+ ui(t);}
+// ---------------- captions + grade overlay ----------------
+const U=document.getElementById('ui').getContext('2d');
+function cap(lines,a,y,size){U.save();U.globalAlpha=a;U.textAlign='center';U.textBaseline='middle';U.font=`italic 500 ${size}px Corm, serif`;
+ U.shadowColor='rgba(60,30,10,.7)';U.shadowBlur=24;U.fillStyle='#fff6ea';lines.forEach((l,i)=>U.fillText(l,W/2,y+i*size*1.12));U.shadowBlur=0;lines.forEach((l,i)=>U.fillText(l,W/2,y+i*size*1.12));U.restore();}
+function ui(t){U.clearRect(0,0,W,H);
+ const v=U.createRadialGradient(W/2,H*0.55,H*0.25,W/2,H*0.55,H*0.75);v.addColorStop(0,'rgba(0,0,0,0)');v.addColorStop(1,'rgba(30,14,4,.45)');U.fillStyle=v;U.fillRect(0,0,W,H);
+ cap(['me when i have to','do everything myself'],Math.min(1,0.5+t/0.8)*clamp((7.2-t)/1.2,0,1),520,104);
+ if(t>8.6&&t<11.6)cap(['...'],ease((t-8.6)/0.4)*clamp((11.6-t)/0.4,0,1),470,140);
+ if(t>14.3)cap(['anyway.','i’m resting now.'],ease((t-14.3)/0.5),470,104);}
+window.draw=frame;
+frame(0);
+</script></body></html>
