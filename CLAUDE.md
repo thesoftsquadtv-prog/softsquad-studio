@@ -13,6 +13,13 @@ Every video must be better than the last. Before scheduling anything, review it 
 - **Sound:** original music with the ambience in sync with the picture (thunder after the flash, the creak when the door swings).
 - Check stills at full size from several moments, fix every flaw, re-check. If it isn't spectacular yet, keep improving it rather than posting it. Fewer, better videos beat more, weaker ones.
 
+## Final check before scheduling: "what's out of place?" (required for every video)
+Charity: "make sure things that are out of place should be looked out for."
+1. Export full-size stills from at least 4 moments (start, middle, the key story moment, end) and a close-up crop of every character and key object.
+2. Hand those stills, **without** the scene code or your own notes, to a separate reviewer agent, asking: "List everything that looks out of place, physically impossible, inconsistent with the story, cut off, floating, the wrong size, or unpolished." A fresh pair of eyes catches what the maker stops seeing.
+3. Go through the list yourself too, asking of every element: Where is it? Why is it there? Would it really look like this? (Hands under a duvet when tucked in; nothing floating or clipping; text fits on its screen; shadows and light come from a real source; sizes match the space; nothing duplicated or left over from an earlier version.)
+4. Fix everything, re-export the stills and check again. Schedule only when nothing is left.
+
 ## Lessons from Charity's feedback (apply every time)
 - **Physical logic:** every element must make sense in the story's world. If someone is snug under a duvet, their hands are inside too (a hand poking out looks like a hole in the duvet). Ask "would this really look like that?" for every body part, object and light.
 - Kitchen dance: clothes must look worn (drape, folds), legs one tone, pan sitting on the burner.
