@@ -66,13 +66,35 @@ def veo_models():
             return out
 
 
+def probe(name):
+    """GET one model directly; returns (ok, Google's exact message). Never spends money."""
+    req = urllib.request.Request(f"{BASE}/models/{name}", headers={"x-goog-api-key": key()})
+    try:
+        with urllib.request.urlopen(req, timeout=60) as r:
+            return True, ",".join(json.loads(r.read()).get("supportedGenerationMethods", []))
+    except urllib.error.HTTPError as e:
+        try:
+            return False, f"HTTP {e.code}: " + json.loads(e.read())["error"]["message"]
+        except Exception:
+            return False, f"HTTP {e.code}"
+
+
 def pick(models):
     for p in PREFER:
         if p in models:
             return p
     fast = [m for m in models if "3.1" in m and "fast" in m] or [m for m in models if "3.1" in m]
     if not fast:
-        sys.exit(f"No Veo 3.1 model available: {models}")
+        # The list can omit models the key may still call; ask for each preferred one directly
+        # and stop (before any paid call) with Google's exact words if none is available.
+        msgs = []
+        for p in PREFER:
+            ok, msg = probe(p)
+            if ok:
+                return p
+            msgs.append(f"{p}: {msg}")
+        sys.exit("No Veo 3.1 model available to this key (nothing generated, nothing spent):\n  "
+                 + "\n  ".join(msgs))
     return sorted(fast)[-1]
 
 
@@ -153,7 +175,9 @@ def caption(src, dst):
 if __name__ == "__main__":
     cmd = sys.argv[1] if len(sys.argv) > 1 else "models"
     if cmd == "models":
-        print("\n".join(veo_models()) or "no Veo models listed")
+        ms = veo_models()
+        print("\n".join(ms) or "no Veo models listed")
+        print("would use:", pick(ms))
     elif cmd == "gen":
         gen(sys.argv[2], int(sys.argv[3]) if len(sys.argv) > 3 else 2)
     elif cmd == "stills":
