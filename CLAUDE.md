@@ -11,6 +11,12 @@ Charity (the owner) has made Claude the **manager** of three faceless YouTube ch
 | Soft Ambience | 8203178 | @softambiencehours (UChc-SW4ldZkAWd3NmrBFW1A) | Cosy homes in every kind of weather. Each house has its own little story (someone at a window, a door swinging, a lantern). Short loops (20–60 s) that loop seamlessly. |
 
 Timezone for all brands: Africa/Lagos. Best posting window so far: US evening = 00:30–03:00 Lagos.
+Slots: Soft Squad already posts 19:00 daily (YouTube + TikTok) through 27 Nov and 1–2 Dec (gap 28–30 Nov) — add its 2nd daily post around 01:00 and fill gaps. safe space after dark ~01:00, Soft Ambience ~01:30. Always check getScheduledPosts first so nothing double-posts.
+
+## Results so far (first 11 h)
+- safe space after dark "what i need right now": 652 views, 52% viewed, 3 subs — strong start.
+- Soft Ambience 1-min rainy lane: 12 views, 53% viewed — testing 20 s loops (lightning hook) instead.
+- Soft Squad: 11 subs, 6.6k views/28 days; comfort-list Shorts are the best performers.
 
 ## Rules (from Charity — do not break)
 - **Highest visual quality, always.** She checks details: realistic proportions, clothes that drape, limbs one skin tone, objects sitting correctly, hands where they should be. Check stills at full size before every full render. Never cut corners to hit volume.
