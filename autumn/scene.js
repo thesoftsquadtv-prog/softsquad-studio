@@ -26,7 +26,7 @@ function land(q){
  for(let i=0;i<260;i++){const x=780+r()*300,y=1560+r()*90;leaf(q,x,y,7+r()*7,r()*6.28,LEAFC[(r()*LEAFC.length)|0],0.7+0.3*r(),0.6);}
  // stepping stones from the gate up to the door
  const L=[[430,1900,1.5],[420,1790,1.3],[410,1700,1.15],[400,1620,1.0],[392,1545,0.9],[386,1480,0.8]];
- for(const [x,y,s] of L){q.fillStyle='#4b4740';q.beginPath();q.ellipse(x,y,50*s,15*s,0,0,6.28);q.fill();q.fillStyle='rgba(220,210,190,.10)';q.beginPath();q.ellipse(x+4*s,y-3*s,38*s,7*s,0,0,6.28);q.fill();
+ for(const [x,y,s] of L){q.fillStyle='#2e2a25';q.beginPath();q.ellipse(x,y+3*s,52*s,16*s,0,0,6.28);q.fill();q.fillStyle='#5e5850';q.beginPath();q.ellipse(x,y,50*s,14*s,0,0,6.28);q.fill();q.fillStyle='rgba(0,0,0,.18)';for(let j=0;j<5;j++){q.beginPath();q.arc(x+(j-2)*16*s,y+((j*7)%5-2)*2*s,2*s,0,6.28);q.fill();}q.fillStyle='rgba(220,210,190,.10)';q.beginPath();q.ellipse(x+4*s,y-3*s,38*s,7*s,0,0,6.28);q.fill();
   q.fillStyle='rgba(255,180,110,.10)';q.beginPath();q.ellipse(x-8*s,y-4*s,24*s,5*s,0,0,6.28);q.fill();leaf(q,x+20*s,y,8*s,1,LEAFC[1],0.9,0.6);}}
 const LEAFC=['#d9622b','#e8913a','#c2412d','#f0b84a','#a8462a','#e07a3c'];
 function leaf(q,x,y,s,a,col,alpha,shade){q.save();q.translate(x,y);q.rotate(a);q.globalAlpha=alpha;q.fillStyle=col;
@@ -48,6 +48,7 @@ function buildStatic(){
  const [c,q]=off(1584,2816);q.scale(SS,SS);land(q);
  house(q,{w:600,h:400,roofH:280,wall:'#c9b48e',roof:'#7a4a34',seed:57,stone:90,windows:[[50,90,150,140],[400,90,150,140]],door:[240,120,210],dormer:true,chim:0.22,porch:[220,160],sideWin:true},HT.tx,HT.ty,HT.s);
  porchBits(q);
+ for(const [cx,cy] of CHIMNEYS){q.fillStyle='#24262c';q.fillRect(cx-36*HT.s,cy+2*HT.s,72*HT.s,14*HT.s);q.fillStyle='rgba(255,255,255,.08)';q.fillRect(cx-36*HT.s,cy+2*HT.s,72*HT.s,3*HT.s);}
  for(const [lx,ly,rad] of LIGHTS){const g=q.createRadialGradient(lx,ly+rad*0.9,5,lx,ly+rad*0.9,rad*1.6);g.addColorStop(0,'rgba(255,170,90,.16)');g.addColorStop(1,'rgba(255,170,90,0)');q.fillStyle=g;q.fillRect(lx-rad*2,ly,rad*4,rad*2.4);}
  STATIC=c;}
 // ---------- animated ----------
@@ -56,28 +57,37 @@ function clouds(t){for(let i=0;i<7;i++){const r=rng(i+40);const y=120+r()*700,rx
  X.fillStyle='rgba(255,230,200,.10)';X.beginPath();X.ellipse(x-rx*0.1,y-ry*0.4,rx*0.7,ry*0.4,0,0,6.28);X.fill();X.restore();}}
 function glow(t){for(const [x,y,rad,ph] of LIGHTS){const fl=0.82+0.1*Math.sin(WK(40)*t+ph)+0.08*Math.sin(WK(73)*t+ph*2);
  const g=X.createRadialGradient(x,y,3,x,y,rad);g.addColorStop(0,`rgba(255,180,100,${0.3*fl})`);g.addColorStop(1,'rgba(255,180,100,0)');X.fillStyle=g;X.fillRect(x-rad,y-rad,rad*2,rad*2);}}
-function smoke(t){const G=gust(t);for(const [cx,cy,s] of CHIMNEYS){for(let i=0;i<18;i++){const p=((t/4+i/18)%1);const sx=cx+p*p*700*s*(0.5+G)+Math.sin(p*9+i)*8,sy=cy-p*150*s;const rr=(10+p*55)*s;
- const g=X.createRadialGradient(sx,sy,0,sx,sy,rr);g.addColorStop(0,`rgba(205,200,210,${(1-p)*0.32})`);g.addColorStop(1,'rgba(205,200,210,0)');X.fillStyle=g;X.fillRect(sx-rr,sy-rr,rr*2,rr*2);}}}
+function smoke(t){const G=gust(t);for(const [cx,cy,s] of CHIMNEYS){for(let i=0;i<44;i++){const p=((t/4+i/44)%1);const sx=cx+p*p*700*s*(0.5+G)+Math.sin(p*9+i)*8,sy=cy-p*150*s;const rr=(16+p*70)*s;
+ const g=X.createRadialGradient(sx,sy,0,sx,sy,rr);g.addColorStop(0,`rgba(205,200,210,${(1-p)*0.16})`);g.addColorStop(1,'rgba(205,200,210,0)');X.fillStyle=g;X.fillRect(sx-rr,sy-rr,rr*2,rr*2);}}}
 // porch lantern on an iron bracket, swaying with the gusts
-function lantern(t){const {tx,ty,s}=HT;const G=gust(t);const lx=tx+(240+120+40)*s,ly=ty-(210+30)*s;
- const a=(0.15+0.22*G)*Math.sin(WK(9)*t)+0.05*Math.sin(WK(23)*t);
- X.fillStyle='#22160f';X.fillRect(lx-4,ly-6,8,30);X.fillRect(lx-4,ly-6,40,7);
- X.save();X.translate(lx+32,ly);X.rotate(a);
- const gl=X.createRadialGradient(0,40,4,0,40,170);gl.addColorStop(0,'rgba(255,200,120,.5)');gl.addColorStop(1,'rgba(255,200,120,0)');X.fillStyle=gl;X.fillRect(-170,-130,340,340);
- X.strokeStyle='#22160f';X.lineWidth=3;X.beginPath();X.moveTo(0,0);X.lineTo(0,16);X.stroke();
- X.fillStyle='#22160f';X.beginPath();X.moveTo(-15,24);X.lineTo(15,24);X.lineTo(9,15);X.lineTo(-9,15);X.fill();
- const fl=0.9+0.1*Math.sin(WK(61)*t);X.fillStyle=`rgba(255,${205+20*fl|0},140,1)`;X.beginPath();X.roundRect(-12,25,24,34,4);X.fill();
- X.fillStyle='#fff3d0';X.beginPath();X.ellipse(0,44,3,6*fl,0,0,6.28);X.fill();
- X.strokeStyle='#22160f';X.lineWidth=3;X.strokeRect(-12,25,24,34);X.beginPath();X.moveTo(0,25);X.lineTo(0,59);X.stroke();X.fillRect(-15,58,30,5);X.restore();}
+function lantern(t){const {tx,ty,s}=HT;const G=gust(t);const lx=tx+345*s,ly=ty-236*s;   // under the porch beam, right of the door
+ const a=(0.10+0.16*G)*Math.sin(WK(9)*t)+0.04*Math.sin(WK(23)*t);
+ // warm pool on the wall, door and step below
+ const pl=X.createRadialGradient(lx,ly+90,10,lx,ly+140,230);pl.addColorStop(0,'rgba(255,190,110,.30)');pl.addColorStop(1,'rgba(255,190,110,0)');X.fillStyle=pl;X.fillRect(lx-240,ly-60,480,420);
+ X.fillStyle='#22160f';X.fillRect(lx-7,ly-4,14,6);   // hook on the beam
+ X.save();X.translate(lx,ly);X.rotate(a);
+ X.strokeStyle='#22160f';X.lineWidth=2.5;for(let k=0;k<5;k++){X.beginPath();X.ellipse(0,5+k*6,2.2,3.4,0,0,6.28);X.stroke();}   // short chain
+ X.fillStyle='#22160f';X.beginPath();X.moveTo(-15,40);X.lineTo(15,40);X.lineTo(8,31);X.lineTo(-8,31);X.fill();
+ const fl=0.9+0.1*Math.sin(WK(61)*t);X.fillStyle=`rgba(255,${205+20*fl|0},140,1)`;X.beginPath();X.roundRect(-12,41,24,34,4);X.fill();
+ X.fillStyle='#fff3d0';X.beginPath();X.ellipse(0,60,3,6*fl,0,0,6.28);X.fill();
+ X.strokeStyle='#22160f';X.lineWidth=3;X.strokeRect(-12,41,24,34);X.beginPath();X.moveTo(0,41);X.lineTo(0,75);X.stroke();X.fillRect(-15,74,30,5);
+ const gl=X.createRadialGradient(0,58,3,0,58,90);gl.addColorStop(0,'rgba(255,200,120,.45)');gl.addColorStop(1,'rgba(255,200,120,0)');X.fillStyle=gl;X.fillRect(-90,-32,180,180);
+ X.restore();}
 // cat in the round attic window, tail swishing as it watches the leaves
-function cat(t){const {tx,ty,s}=HT;const cx=tx+300*s,by=ty-466*s;   // dormer window: round, 64x58, centred (300,-495) in house coords
- X.save();X.beginPath();X.ellipse(cx,by-29*s,31*s,28*s,0,0,6.28);X.clip();
- const sw=Math.sin(WK(5)*t)*0.6+Math.sin(WK(11)*t)*0.25,look=Math.sin(WK(2)*t)*2.5;
- X.fillStyle='#2a1c1a';
- X.beginPath();X.ellipse(cx,by-8*s,13*s,16*s,0,0,6.28);X.fill();                 // body
- X.beginPath();X.arc(cx+look*s*0.3,by-28*s,8.5*s,0,6.28);X.fill();              // head
- for(const d of [-1,1]){X.beginPath();X.moveTo(cx+look*s*0.3+d*7*s,by-33*s);X.lineTo(cx+look*s*0.3+d*4*s,by-41*s);X.lineTo(cx+look*s*0.3+d*1*s,by-35*s);X.fill();}
- X.strokeStyle='#2a1c1a';X.lineWidth=3.2*s;X.lineCap='round';X.beginPath();X.moveTo(cx+10*s,by+4*s);X.quadraticCurveTo(cx+22*s,by+2*s,cx+20*s+sw*8*s,by-12*s+Math.abs(sw)*3*s);X.stroke();
+function cat(t){const {tx,ty,s}=HT;
+ X.save();X.translate(tx,ty);X.scale(s,s);
+ X.beginPath();X.ellipse(300,-495,30,27,0,0,6.28);X.save();X.clip();
+ const sw=Math.sin(WK(5)*t)*0.6+Math.sin(WK(11)*t)*0.25,look=Math.sin(WK(2)*t)*2.2;
+ X.fillStyle='#24181a';X.strokeStyle='#24181a';X.lineCap='round';
+ X.beginPath();X.ellipse(300,-474,15,15,0,0,6.28);X.fill();                       // haunches
+ X.beginPath();X.ellipse(300+look*0.3,-488,10,12,0,0,6.28);X.fill();               // chest
+ const hx=300+look,hy=-504;X.beginPath();X.ellipse(hx,hy,10,9,0,0,6.28);X.fill();   // head
+ for(const d of [-1,1]){X.beginPath();X.moveTo(hx+d*9,hy-3);X.lineTo(hx+d*8,hy-17);X.lineTo(hx+d*2,hy-8);X.closePath();X.fill();}   // ears
+ X.lineWidth=4.5;X.beginPath();X.moveTo(312,-466);X.quadraticCurveTo(328,-468,326+sw*6,-484-Math.abs(sw)*3);X.stroke();   // tail, swishing
+ X.restore();
+ // window bars and frame in front of her
+ X.strokeStyle='#3a2418';X.lineWidth=4;X.beginPath();X.moveTo(300,-522);X.lineTo(300,-468);X.moveTo(270,-495);X.lineTo(330,-495);X.stroke();
+ X.lineWidth=7;X.beginPath();X.ellipse(300,-495,31,28,0,0,6.28);X.stroke();
  X.restore();}
 // the garden gate on its hinge, swinging and tapping the post with the gusts
 const FENCE={y:1690,gx:385,gw:110};
@@ -88,40 +98,49 @@ function fence(t){const y=FENCE.y;
  // gate posts
  for(const x of [FENCE.gx-14,FENCE.gx+FENCE.gw]){X.fillStyle='#cfc3ae';X.fillRect(x,y-108,16,110);X.fillStyle='#e9dfcd';X.beginPath();X.arc(x+8,y-110,9,0,6.28);X.fill();X.fillStyle='rgba(0,0,0,.25)';X.fillRect(x+11,y-104,5,106);}
  // gate: hinged on the left post, opens away from us; foreshortened by cos(angle)
- const G=gust(t);const op=Math.max(0,0.25+0.45*G*(0.6+0.4*Math.sin(WK(4)*t)));const c=Math.cos(op*1.2);
+ const G=gust(t);const op=Math.max(0,0.25+0.45*G*(0.6+0.4*Math.sin(WK(4)*t)));const c=Math.cos(0.1+op*1.25);
  X.save();X.translate(FENCE.gx+2,0);X.scale(c,1);
- X.strokeStyle='#bfb3a0';X.lineWidth=7;X.beginPath();X.moveTo(0,y-60);X.lineTo(FENCE.gw-2,y-60);X.moveTo(0,y-26);X.lineTo(FENCE.gw-2,y-26);X.stroke();X.strokeStyle='#a99d8a';X.lineWidth=5;X.beginPath();X.moveTo(6,y-28);X.lineTo(FENCE.gw-8,y-58);X.stroke();
- for(let x=4;x<FENCE.gw-12;x+=34){pick(x,80,1.05);}X.restore();
+ X.strokeStyle='#bfb3a0';X.lineWidth=7;X.beginPath();X.moveTo(0,y-58);X.lineTo(FENCE.gw-4,y-58);X.moveTo(0,y-24);X.lineTo(FENCE.gw-4,y-24);X.stroke();X.strokeStyle='#a99d8a';X.lineWidth=5;X.beginPath();X.moveTo(6,y-28);X.lineTo(FENCE.gw-8,y-58);X.stroke();
+ for(const x of [3,32,61,90]){pick(x,88,1.1);}X.restore();
  X.fillStyle='#3a3a3a';X.fillRect(FENCE.gx-4,y-70,10,6);X.fillRect(FENCE.gx-4,y-34,10,6);}   // hinges
 // big maple at the right, swaying; its canopy reaches over the garden
 const TREE={x:985,y:1600};
 const clamp01=v=>Math.max(0,Math.min(1,v));
-function maple(t){const G=gust(t);const sw=(Math.sin(WK(3)*t)*0.6+Math.sin(WK(7)*t+1)*0.3)*G;
+// canopy painted once into three depth layers of leaf clumps (with sky gaps), drawn each frame with a little parallax sway
+let CAN=null;const CK=1440/1080*1.15,CB={x:-430,y:-1140,w:700,h:660};
+function buildCanopy(){CAN=[];const q=rng(8);
+ const dark=['#4e1d12','#5e2316','#6a2a18'],mid=['#7a2f1c','#8e3a20','#a04f25','#93421f'],lite=['#b0602a','#c27a30','#b9552a','#cf8c3a'];
+ for(let L=0;L<3;L++){const [c,g]=off(CB.w*CK|0,CB.h*CK|0);g.scale(CK,CK);g.translate(-CB.x,-CB.y);
+  const N=[150,190,140][L];
+  for(let k=0;k<N;k++){const a=q()*6.28,rr=Math.sqrt(q())*(L==2?0.92:1);const cx=-90+Math.cos(a)*rr*300,cy=-830+Math.sin(a)*rr*245;
+   if(L>0&&Math.sin(cx*0.031+L)*Math.cos(cy*0.037)>0.55)continue;   // leave gaps where the sky and branches show through
+   const lit=clamp01((-(cx+90)*0.6-(cy+830))/300+0.45),warm=clamp01((cy+690)/150);
+   const pal=L==0?dark:(lit>0.6&&L==2?lite:mid);const R=14+q()*16;
+   for(let j=0;j<8;j++){const an=q()*6.28,d=Math.sqrt(q())*R;const col=pal[(q()*pal.length)|0];
+    leaf(g,cx+Math.cos(an)*d,cy+Math.sin(an)*d*0.8,7+q()*5,q()*6.28,col,1,0.25+0.3*(1-lit));}
+   
+   }
+  CAN.push(c);}}
+function maple(t){if(!CAN)buildCanopy();const G=gust(t);const sw=(Math.sin(WK(3)*t)*0.6+Math.sin(WK(7)*t+1)*0.3)*G;
  X.save();X.translate(TREE.x,TREE.y);
- const tg=X.createLinearGradient(-60,0,70,0);tg.addColorStop(0,'#3a2a22');tg.addColorStop(0.5,'#241a15');tg.addColorStop(1,'#140e0b');X.fillStyle=tg;
- X.beginPath();X.moveTo(-70,0);X.quadraticCurveTo(-30,-300,-40+sw*12,-640);X.lineTo(30+sw*12,-640);X.quadraticCurveTo(30,-300,80,0);X.fill();
- X.strokeStyle='#241a15';X.lineCap='round';for(const [x1,y1,x2,y2,w] of [[-20,-420,-260,-640,26],[0,-560,-180,-860,20],[10,-520,160,-820,20],[-10,-640,-60,-960,16]]){X.lineWidth=w;X.beginPath();X.moveTo(x1+sw*8,y1);X.quadraticCurveTo((x1+x2)/2+sw*16,(y1+y2)/2,x2+sw*30,y2);X.stroke();}
- X.strokeStyle='rgba(255,190,130,.15)';X.lineWidth=6;X.beginPath();X.moveTo(-64,-10);X.quadraticCurveTo(-28,-300,-38+sw*12,-630);X.stroke();   // window-glow on the trunk
- // canopy: a dark core, then hundreds of small leaf clusters, moonlit from the upper left and warmed by the windows below
- const q=rng(8);const CL=[];for(let k=0;k<520;k++){const a=q()*6.28,rr=Math.pow(q(),0.6);const ex=-90+Math.cos(a)*rr*300,ey=-830+Math.sin(a)*rr*250*(Math.sin(a)>0?0.9:1);CL.push([ex,ey,10+q()*20,q(),q()]);}
- CL.sort((p,r2)=>p[1]-r2[1]);
- X.fillStyle='#3a1a14';X.beginPath();X.ellipse(-90+sw*25,-830,280,220,0,0,6.28);X.fill();
- for(const [ex,ey,br,u,v] of CL){const bend=sw*(30+(ey+1080)*0.05)*(1+u*0.4);const bx=ex+bend+Math.sin(WK(5)*t+u*20)*3*G,by=ey+Math.cos(WK(4)*t+v*20)*2*G;
-  const lit=clamp01((-(ex+90)*0.6-(ey+830))/320+0.5);const warm=clamp01((ey+700)/160);
-  const base=['#6e2a19','#86381f','#a04f25','#752d1a','#ab6c2c','#5e2316'][(u*6)|0];
-  X.fillStyle=base;X.beginPath();X.ellipse(bx,by,br*1.15,br*0.9,v*3,0,6.28);X.fill();
-  X.fillStyle=`rgba(225,225,245,${0.13*lit})`;X.beginPath();X.ellipse(bx-br*0.3,by-br*0.3,br*0.6,br*0.4,v*3,0,6.28);X.fill();
-  X.fillStyle=`rgba(255,170,90,${0.18*warm})`;X.beginPath();X.ellipse(bx,by+br*0.3,br*0.7,br*0.4,0,0,6.28);X.fill();
-  X.fillStyle='rgba(30,10,8,.22)';X.beginPath();X.ellipse(bx+br*0.4,by+br*0.4,br*0.5,br*0.3,0,0,6.28);X.fill();}
- // a few leaves standing out at the edge of the canopy
- for(let k=0;k<70;k++){const a=q()*6.28;const ex=-90+Math.cos(a)*(290+q()*30),ey=-830+Math.sin(a)*(240+q()*25);leaf(X,ex+sw*40,ey,6+q()*4,a+q(),LEAFC[k%LEAFC.length],0.9,0.3);}
+ X.drawImage(CAN[0],CB.x+sw*16,CB.y,CB.w,CB.h);
+ // trunk with a root flare, and limbs reaching up into the crown
+ const tg=X.createLinearGradient(-70,0,80,0);tg.addColorStop(0,'#46332a');tg.addColorStop(0.45,'#2a1e18');tg.addColorStop(1,'#140e0b');X.fillStyle=tg;
+ X.beginPath();X.moveTo(-120,6);X.quadraticCurveTo(-70,-10,-56,-70);X.quadraticCurveTo(-34,-320,-30+sw*6,-600);X.lineTo(24+sw*6,-600);X.quadraticCurveTo(30,-320,58,-70);X.quadraticCurveTo(80,-10,130,6);X.closePath();X.fill();
+ X.strokeStyle='rgba(0,0,0,.35)';X.lineWidth=2;for(const o of [-30,-12,6,22]){X.beginPath();X.moveTo(o*1.4,-20);X.bezierCurveTo(o,-200,o*0.8+4,-380,o*0.6+sw*4,-580);X.stroke();}
+ X.strokeStyle='rgba(255,190,130,.16)';X.lineWidth=7;X.beginPath();X.moveTo(-60,-60);X.quadraticCurveTo(-36,-320,-30+sw*6,-590);X.stroke();   // window glow on the trunk
+ X.strokeStyle='#2a1e18';X.lineCap='round';
+ for(const [x1,y1,cx,cy,x2,y2,w] of [[-8,-580,-80,-680,-210,-760,22],[0,-590,-20,-720,-70,-930,18],[6,-585,60,-680,110,-850,18],[-20,-640,-180,-700,-300,-700,12],[-60,-800,-30,-880,-10,-1000,9],[60,-760,120,-800,170,-760,9]]){
+  const k=(-y2-560)/450;X.lineWidth=w;X.beginPath();X.moveTo(x1+sw*6,y1);X.quadraticCurveTo(cx+sw*(10+12*k),cy,x2+sw*(14+16*k),y2);X.stroke();}
+ X.drawImage(CAN[1],CB.x+sw*24,CB.y,CB.w,CB.h);
+ X.drawImage(CAN[2],CB.x+sw*32,CB.y+Math.abs(sw)*2,CB.w,CB.h);
  X.restore();}
 // leaves blowing across the garden: each crosses the frame a whole number of times per loop, tumbling as it goes
 const R0=rng(91);const FLY=[...Array(110)].map(()=>({x:R0(),y:R0(),z:R0(),n:1+((R0()*3)|0),ph:R0()*6.28,c:LEAFC[(R0()*LEAFC.length)|0],sp:1+((R0()*3)|0)}));
 function leaves(t,front){const G=gust(t);for(const f of FLY){const isFront=f.z>0.85;if(isFront!==front)continue;const span=W+300;
  const x=((f.x*span+t*span*f.n/LOOP)%span)-150;const y0=180+f.y*1500;const y=y0+Math.sin(WK(f.n*2)*t+f.ph)*60*(0.5+G)+Math.sin(WK(7)*t+f.ph*3)*12;
- const s=(4+f.z*9)*(front?2.4:1);const a=WK(f.sp*3)*t+f.ph;const flip=Math.cos(WK(f.sp*4)*t+f.ph);
- X.save();if(front)X.filter='blur(3px)';X.translate(x,y);X.scale(1,Math.max(0.15,Math.abs(flip)));leaf(X,0,0,s,a,f.c,0.85,flip<0?0.5:0.15);X.restore();}}
+ const s=(4+f.z*9)*(front?1.6:1);const a=WK(f.sp*3)*t+f.ph;const flip=Math.cos(WK(f.sp*4)*t+f.ph);
+ X.save();X.translate(x,y);X.scale(1,Math.max(0.4,Math.abs(flip)));leaf(X,0,0,s,a,f.c,0.85,flip<0?0.5:0.15);X.restore();}}
 // leaves skittering along the ground in the gusts
 const R1=rng(23);const SKIT=[...Array(36)].map(()=>({x:R1(),y:1720+R1()*170,n:1+((R1()*2)|0),ph:R1()*6.28,c:LEAFC[(R1()*LEAFC.length)|0]}));
 function skitter(t){for(const f of SKIT){const span=W+200;const x=((f.x*span+t*span*f.n/LOOP)%span)-100;const hop=Math.max(0,Math.sin(WK(f.n*6)*t+f.ph))*14;leaf(X,x,f.y-hop,9,WK(f.n*5)*t+f.ph,f.c,0.95,0.4);}}
