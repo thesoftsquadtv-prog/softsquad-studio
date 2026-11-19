@@ -142,24 +142,25 @@ def meter(label,val,color,pct=None,size=84):
             f'<div style="font-size:{size}px;font-weight:700;color:{color};line-height:1.1">{val}</div>{bar}</div>')
 def chip(val,color):
     return f'<div style="background:#fff;border-radius:24px;padding:6px 0;box-shadow:0 6px 16px rgba(0,0,0,.12);font:700 34px Poppins,sans-serif;color:{color};text-align:center">{val}</div>'
-def wif_hook(title,chips):
-    b=hook(title,None,mood="spark",dur=3.2,size=74)
+def wif_hook(title,chips,prop=None,prop_w=520):
+    b=hook(title,prop,mood="spark",dur=3.2,size=74,prop_x=(1080-prop_w)//2,prop_w=prop_w)
     for i,(n,x,y,w) in enumerate(SQ):
         v,c=chips[n]; cw=150; cx=x+w//2-cw//2
         b["els"].append(H(chip(v,c),cx,y-80 if n!="Toffee" else y-70,cw,t0=0.35+0.12*i))
     b["sfx"]+= [(0.35+0.12*i,"pop") for i in range(5)]
     return b
-def reveal(name,line,label,val,color,pct=None,sub=None,moods=None,dur=4.2,size=76,swap=None):
-    b=who(name,line,sub=sub,prop=meter(label,val,color,pct),moods=moods,dur=dur,size=size,prop_w=560,prop_y=400)
+def reveal(name,line,label,val,color,pct=None,sub=None,moods=None,dur=4.2,size=76,swap=None,msize=84):
+    b=who(name,line,sub=sub,prop=meter(label,val,color,pct,size=msize),moods=moods,dur=dur,size=size,prop_w=560,prop_y=400)
     if swap:  # (time, val, color, pct): meter changes mid-beat
         t,v2,c2,p2=swap; m=b["els"][2]
         m["kf"]=m["kf"]+[[t-0.05,{"o":1}],[t,{"o":0}]]
         x=(1080-560)//2
-        b["els"].insert(3,H(meter(label,v2,c2,p2),x,400,560,kf=[[t-0.01,{"x":x,"y":400,"s":1.25,"o":0}],[t,{"x":x,"y":400,"s":1.25,"o":1}],[t+0.35,{"x":x,"y":400,"s":1,"o":1},"back"]]))
+        b["els"].insert(3,H(meter(label,v2,c2,p2,size=msize),x,400,560,kf=[[t-0.01,{"x":x,"y":400,"s":1.25,"o":0}],[t,{"x":x,"y":400,"s":1.25,"o":1}],[t+0.35,{"x":x,"y":400,"s":1,"o":1},"back"]]))
         b["sfx"].append((t,"buzz"))
     return b
 
 RED,AMB,GRN,PUR="#e0475b","#e39b2d","#3aa46a","#7a5fc0"
+TOF="#b06a2c"
 
 @ep(11,"ep11-what-if-social-battery","What If You Could See Everyone's Social Battery? 🔋 #shorts",
  "what if you could see everyone's social battery? 🔋 which one are you? 👇\n\nwhat's your battery at right now? drop a % 💬\n\n#thesoftsquad #socialbattery #introvert #relatable #animation #shorts",
@@ -204,6 +205,23 @@ def _():
      reveal("Juno","Juno: 11 hours","😴 sleep last night","11h",GRN,92,sub="…still tired",moods=[[0,"happy"],[1.6,"sad"]]),
      reveal("Toffee","Toffee: 19 hours","😴 sleep last night","19h",PUR,100,sub="and a nap after this 🐾",moods=[[0,"spark"]]),
      endcard("How much did<br>you sleep? 😴","Tell us in the comments 👇",numbers=False),
+    ])
+
+@ep(14,"ep14-what-if-love-language","What If You Could See Everyone's Love Language? 💗 #shorts",
+ "what if you could see everyone's love language? 💗 which one are you? 👇\n\nwhat's YOUR love language? tell us in the comments 💬\n\n#thesoftsquad #lovelanguage #relatable #friendship #animation #shorts",
+ ["love language","what if","relatable","the soft squad","animation"])
+def _():
+    L="💗 love language"
+    return build([
+     wif_hook("What if you could see<br>everyone's love language? 💗",
+        {"Milo":("words",GRN),"Kemi":("acts",AMB),"Juno":("time",PUR),"Amara":("gifts?",RED),"Toffee":("touch",TOF)},
+        prop=card("<small>the 5 love languages</small>words · acts · time<br>gifts · touch",46),prop_w=640),
+     reveal("Kemi","Kemi's love language:",L,"acts of service",AMB,None,sub="*already fixed your CV*",moods=[[0,"spark"]],msize=58),
+     reveal("Milo","Milo's love language:",L,"words of affirmation",GRN,None,sub="*3 drafts later: “hey”*",moods=[[0,"happy"],[1.6,"sad"]],msize=46),
+     reveal("Juno","Juno's love language:",L,"quality time",PUR,None,sub="*sits with you in silence*",moods=[[0,"calm"]],msize=58),
+     reveal("Amara","Amara's love language:",L,"gifts 🎁",RED,None,sub="*knows your dog's birthday*",moods=[[0,"happy"],[2.0,"spark"]],swap=(2.0,"all five 💗",RED,None),dur=4.6,msize=58),
+     reveal("Toffee","Toffee's love language:",L,"physical touch",TOF,None,sub="*4-second cuddles only*",moods=[[0,"spark"]],msize=58),
+     endcard("What's your<br>love language?","Tell us in the comments 👇",numbers=False),
     ])
 
 if __name__=="__main__":

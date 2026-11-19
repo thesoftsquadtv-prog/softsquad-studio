@@ -21,6 +21,10 @@ Charity: "make sure things that are out of place should be looked out for."
 4. Fix everything, re-export the stills and check again. Schedule only when nothing is left.
 
 ## Lessons from Charity's feedback (apply every time)
+- (19 Nov, reviewer passes) Seen-from-behind figures: a round bun with a curved line + a coloured tie under it reads as a smiley face — use twisted strand strokes and a dark, thin tie. Neck width from behind ≈ 0.5 of head width, short. No hatch "stubble" lines at the nape or collar.
+- An arm raised out of a blanket must show the blanket draping over the forearm where it leaves the body, or it looks like it goes through the fabric. Hands at real size (back of hand ≈ 0.55 × head width).
+- Breath fog: irregular cluster of soft blobs at mouth height, not a perfect disc; anything drawn in it fades with it. Keep props inside the camera's zoomed frame (check the last frame of a push-in).
+- Soft Squad: the joke line must match the pose (e.g. Toffee's open arms → "4-second cuddles only", not "only on her terms"); keep chip/card colours consistent between the hook and the reveals; one caption style per video (*asterisks*).
 - **Physical logic:** every element must make sense in the story's world. If someone is snug under a duvet, their hands are inside too (a hand poking out looks like a hole in the duvet). Ask "would this really look like that?" for every body part, object and light.
 - Kitchen dance: clothes must look worn (drape, folds), legs one tone, pan sitting on the burner.
 - Window watcher: slim enough to fit the window; chin resting on hands, not hands over the mouth.
@@ -43,7 +47,12 @@ Slots: Soft Squad already posts 19:00 daily (YouTube + TikTok) through 27 Nov an
 - Soft Ambience 1-min rainy lane: 12 views, 53% viewed — testing 20 s loops (lightning hook) instead.
 - Soft Squad: 11 subs, 6.6k views/28 days; comfort-list Shorts are the best performers.
 
-## Results — 18 Nov 2026 (latest)
+## Results — 19 Nov 2026 (latest)
+- Metricool (lags): Soft Squad Shorts 10–15 Nov: "Your Friends at a Party" 963, "Sunday Night Feelings" 912, "Toffee Judges Kemi's Morning Routine" 597, "Texting Styles" 377, "Soft Reminders" 171, "When the Plans Get Cancelled" 89. Group-dynamics/"which friend are you" topics beat soft affirmations ~5×. safe space + Soft Ambience 18 Nov posts not yet in Metricool.
+- Public YouTube pages could not be fetched from scheduled runs (the fetch permission prompt times out with nobody there) → rely on Metricool, or ask Charity for a Studio screenshot when it matters.
+- Scheduled 20 Nov: Soft Squad 01:00 "What If You Could See Everyone's Love Language? 💗" (ep14); safe space 01:00 "first snow tonight, and i thought of you ❄️" (new `snow/` scene); Soft Ambience 01:30 "windy autumn night" 20 s loop (new `autumn/` scene).
+
+## Results — 18 Nov 2026
 - **Soft Squad "What If You Could See Everyone's Social Battery?" = new best launch: 1.1k views in 4 h 22 min, 63.4% viewed, 17 likes, ranked 1 of 10.** "What if" + a relatable adult-life concept (social battery) is the strongest format so far → make more "What if…" Shorts (ideas: what if you could see everyone's stress level / love language / screen time guilt / how many tabs open in their head), alternating with comfort lists.
 - Other Soft Squad Shorts: "Sunday Night Feelings" 1.2k, "Things That Are Actually Okay" 942 (30 likes). Long lofi hour: 11 views → no more hour-long uploads.
 - Viewers identify with the characters (comment: "I'm Amara") → give each character a clear, recognisable personality and let viewers pick theirs ("which one are you? 👇" in descriptions).
@@ -84,5 +93,7 @@ Note: GitHub releases are not allowed from these sessions; repos can't be create
 - `lofi/` — lofi music synth (`music.py`), study-with-Juno loop (`lofi2.py`), hour assembly (`hour.py`).
 - `kitchen/` — late-night kitchen couple scene (canvas, `kitchen.html`, `couple.js`), `render.py`, `audio.py`.
 - `village/` — Soft Ambience: `lane.html` (four-cottage rainy lane, angled view, lightning, reflections, camera breathing), renderer `rl.py` (env: TOFF clip offset, CAMP camera period, CAP caption JSON), audio `audio_lane.py`; older `cottages.html`/`scene.html`.
+- `snow/` — safe space "first snow" window-seat scene (`firstsnow.html` + `scene.js`, `render.py`, `audio.py`: lofi + wind + breath + fingertip squeak). Fog/heart drawn on an offscreen layer with destination-out.
+- `autumn/` — Soft Ambience "windy autumn night" (`autumn.html` = `lib.js` cottage helpers shared from the lane + `scene.js`). Every motion uses WK(k)=2πk/20 so 20 s renders loop seamlessly with no crossfade; `audio.py` crossfades its own tail. Slow on 2 CPUs (~30 min for 20 s): start renders early.
 - `brand/` — profile pictures, banners and their source pages. `fonts/` — Cormorant Garamond italic (also at `fontdl/package/files/` for older scripts).
 - Rendering: Playwright Chromium is preinstalled (`chromium.launch()`), page loads can take >30 s (use timeout 180000). Pipe JPEG screenshots into ffmpeg (libx264). Seamless loops: render 1.5–2 s extra and crossfade the tail over the head in separate ffmpeg steps (a single filter graph runs out of memory).
