@@ -41,8 +41,8 @@ Charity: "make sure things that are out of place should be looked out for."
 | Soft Ambience | 8203178 | @softambiencehours (UChc-SW4ldZkAWd3NmrBFW1A) | Cosy homes in every kind of weather. Each house has its own little story (someone at a window, a door swinging, a lantern). Short loops (20–60 s) that loop seamlessly. |
 | Crumb Club | 8212990 | @thecrumbclub (UC_H2r0rLOvUhpxDi2N0CztQ) | Funny photoreal food world: alive food with little dramas, humans never notice (kitchen-chaos skits, food moments, food in love). Made with Gemini image + Omni video. **Read `food/CRUMB_CLUB.md`**; needs the Default cloud environment. |
 
-Timezone for all brands: Africa/Lagos. Best posting window so far: US evening = 00:30–03:00 Lagos.
-Slots: Soft Squad already posts 19:00 daily (YouTube + TikTok) through 27 Nov and 1–2 Dec (gap 28–30 Nov) — add its 2nd daily post around 01:00 and fill gaps. safe space after dark ~01:00, Soft Ambience ~01:30. Always check getScheduledPosts first so nothing double-posts.
+Timezone for all brands: Africa/Lagos. **Charity's rule (20 Nov 2026): every video goes out by 19:00 Lagos — nothing scheduled after 19:00 or overnight.**
+Daily slots (Lagos): Soft Squad 16:00 + 19:00 (YouTube + TikTok; 19:00 already filled through 27 Nov and 1–2 Dec, fill gaps 28–30 Nov), safe space after dark 18:00, Soft Ambience 18:30, Crumb Club 19:00. The daily manager runs at 10:43, so it schedules for the same day's slots (or the next free day). Always check getScheduledPosts first so nothing double-posts; if you find any post scheduled after 19:00, move it to that brand's slot.
 
 ## Results so far (first 11 h)
 - safe space after dark "what i need right now": 652 views, 52% viewed, 3 subs — strong start.

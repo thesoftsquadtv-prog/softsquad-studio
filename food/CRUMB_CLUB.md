@@ -31,8 +31,8 @@ Also: holidays and moments (Thanksgiving family cooking with an escaping turkey,
 Charity: "it doesn't need my permission to post, it should create a video every day and post it with funny titles, remember we want people to laugh and feel good."
 - **Make one new video every day and schedule it yourself.** No approval step. Quality gate instead: the "what's out of place?" review must pass (separate reviewer agent). If a video doesn't pass after fixes within the day's budget, post nothing that day rather than a weak one, and say why in the report.
 - **Accounts:** YouTube @thecrumbclub (UC_H2r0rLOvUhpxDi2N0CztQ); Metricool brand **8212990** (timezone Africa/Lagos).
-- **Slot:** 02:00 Lagos daily (US evening). Always `getScheduledPosts` for blogId 8212990 first; never double-post a day. If the next night is already filled, make the following night's video.
-- **Order:** first post = the butter-at-the-spa video made 18 Nov (night of 18→19 Nov, 02:00). Then one new video per day. Thanksgiving turkey skit must post 24 or 25 Nov (Thanksgiving is Thu 26 Nov).
+- **Slot:** 19:00 Lagos daily (Charity: everything out by 19:00). Always `getScheduledPosts` for blogId 8212990 first; never double-post a day. If the next night is already filled, make the following night's video.
+- **Order:** first post = the butter-at-the-spa video made 18 Nov (night of 18→19 Nov, 19:00). Then one new video per day. Thanksgiving turkey skit must post 24 or 25 Nov (Thanksgiving is Thu 26 Nov).
 - **Variety:** rotate the three kinds (kitchen chaos, food moments, food in love) and different foods/cuisines; never the same food two days running; check the last 7 posts so nothing repeats (YouTube inauthentic-content policy). Ride the calendar (Thanksgiving, Christmas, New Year diets, Valentine's, Super Bowl snacks).
 
 ## Titles, descriptions, hashtags
@@ -51,11 +51,11 @@ Goal: people laugh, feel good, share and tag a friend.
 1. Final MP4: H.264 1080×1920, crf ~18–20, AAC, < 95 MB; filename `crumb-YYYYMMDD-slug.mp4`.
 2. Attach + clone `thesoftsquadtv-prog/softsquad-media` (add_repo, push access), copy into `v/`, commit, `git -c push.negotiate=true push origin HEAD:main`.
 3. Media URL: `https://raw.githubusercontent.com/thesoftsquadtv-prog/softsquad-media/main/v/<file>.mp4`.
-4. Metricool `createScheduledPost`: blogId 8212990, providers YouTube only, publicationDate = the 02:00 Lagos slot (timezone Africa/Lagos), text = description, media = [URL], `youtubeData`: `{title, type: "short", privacy: "public", madeForKids: false, isAiGeneratedContent: true, category: "COMEDY"}` (fall back to ENTERTAINMENT if COMEDY is rejected). Check the response: media URL should become static.metricool.com. Then delete the file from `softsquad-media/v/` and push.
+4. Metricool `createScheduledPost`: blogId 8212990, providers YouTube only, publicationDate = the 19:00 Lagos slot (timezone Africa/Lagos), text = description, media = [URL], `youtubeData`: `{title, type: "short", privacy: "public", madeForKids: false, isAiGeneratedContent: true, category: "COMEDY"}` (fall back to ENTERTAINMENT if COMEDY is rejected). Check the response: media URL should become static.metricool.com. Then delete the file from `softsquad-media/v/` and push.
 5. Log the post (date, title, idea, cost, review notes) by appending to `food/crumb_log.md` in softsquad-studio, commit + push. Never commit the key.
 6. Report to Charity in 3–4 lines (SendUserMessage / push): what was posted and when, the cost, anything she must do.
 
-**If Metricool tools aren't available in your run** (no `createScheduledPost`): don't stop. Push the finished MP4 to `softsquad-media/queue/crumb-YYYYMMDD-slug.mp4` plus a matching `.json` with `{"blogId":8212990,"publicationDate":"YYYY-MM-DDT02:00:00","timezone":"Africa/Lagos","title":...,"text":...,"category":"COMEDY"}`, log it as "queued", and say so in the report. The daily manager (which has Metricool) schedules anything in `queue/` on its next run.
+**If Metricool tools aren't available in your run** (no `createScheduledPost`): don't stop. Push the finished MP4 to `softsquad-media/queue/crumb-YYYYMMDD-slug.mp4` plus a matching `.json` with `{"blogId":8212990,"publicationDate":"YYYY-MM-DDT19:00:00","timezone":"Africa/Lagos","title":...,"text":...,"category":"COMEDY"}`, log it as "queued", and say so in the report. The daily manager (which has Metricool) schedules anything in `queue/` on its next run.
 
 ## Learning loop
 Every run: check Metricool analytics for brand 8212990 (lags 2–3 days) and the public view counts on @thecrumbclub. Note in `crumb_log.md` which kinds/foods/titles get the most views, likes and comments, and lean into them. Spend cap $3/day (Charity can raise it).
