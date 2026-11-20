@@ -224,6 +224,22 @@ def _():
      endcard("What's your<br>love language?","Tell us in the comments 👇",numbers=False),
     ])
 
+@ep(15,"ep15-what-if-friendsgiving","What If You Could See What Everyone Brings to Friendsgiving? 🦃 #shorts",
+ "what if you could see what everyone's bringing to friendsgiving? 🦃 which one are you? 👇\n\nwhat are YOU bringing this year? tell us in the comments 💬\n\n#thesoftsquad #friendsgiving #thanksgiving #relatable #friends #animation #shorts",
+ ["friendsgiving","thanksgiving","what if","the soft squad","animation"])
+def _():
+    L="🦃 Friendsgiving"
+    return build([
+     wif_hook("What if you could see<br>what everyone brings<br>to Friendsgiving? 🦃",
+        {"Milo":("chips",AMB),"Kemi":("menu",GRN),"Juno":("ice",PUR),"Amara":("pies",RED),"Toffee":("none",TOF)}),
+     reveal("Kemi","Kemi is bringing:",L,"3-course menu",GRN,None,sub="*with printed name cards*",moods=[[0,"spark"]],msize=58),
+     reveal("Milo","Milo is bringing:",L,"1 bag of chips",AMB,None,sub="*half-eaten in the car*",moods=[[0,"happy"],[1.6,"sad"]],msize=58),
+     reveal("Juno","Juno is bringing:",L,"a bag of ice 🧊",PUR,None,sub="*arrives 2 hours late*",moods=[[0,"calm"]],msize=58),
+     reveal("Amara","Amara is bringing:",L,"4 pies 🥧",RED,None,sub="*+ tupperware for all*",moods=[[0,"happy"],[2.0,"spark"]],swap=(2.0,"everything 💗",RED,None),dur=4.6,msize=58),
+     reveal("Toffee","Toffee is bringing:",L,"none 🐾",TOF,None,sub="*arms open. for the turkey.*",moods=[[0,"spark"]],msize=58),
+     endcard("What are you<br>bringing? 🦃","Tell us in the comments 👇",numbers=False),
+    ])
+
 if __name__=="__main__":
     n=int(sys.argv[1]); e=EPS[n]
     sys.argv=[sys.argv[0]]+sys.argv[2:]
