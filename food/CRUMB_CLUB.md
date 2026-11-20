@@ -35,6 +35,11 @@ Charity: "it doesn't need my permission to post, it should create a video every 
 - **Order:** first post = the butter-at-the-spa video made 18 Nov (night of 18→19 Nov, 19:00). Then one new video per day. Thanksgiving turkey skit must post 24 or 25 Nov (Thanksgiving is Thu 26 Nov).
 - **Variety:** rotate the three kinds (kitchen chaos, food moments, food in love) and different foods/cuisines; never the same food two days running; check the last 7 posts so nothing repeats (YouTube inauthentic-content policy). Ride the calendar (Thanksgiving, Christmas, New Year diets, Valentine's, Super Bowl snacks).
 
+## Planned schedule (Charity, 20 Nov) — follow this before the free rotation
+- **21 Nov (Sat):** kitchen-chaos skit: **the corn escapes under the table** (Charity's original idea — cook tosses ingredients in confidently, corn sneaks off and falls under the table, she finds it and uses it anyway while it screams, tastes, "…oh no" face). Short punchy title, e.g. "the corn tried it 🌽".
+- **24 Nov (Tue):** Thanksgiving skit: family cooking together, the turkey keeps escaping between shots, guests arrive to a very sweaty turkey. Title "happy thanksgiving 🦃".
+- After that: a cooking/kitchen-chaos skit at least every 3rd day, food moments and food in love in between.
+
 ## Titles, descriptions, hashtags
 Goal: people laugh, feel good, share and tag a friend.
 - **Title** (≤ 60 chars, funny, plain words, at most 1 emoji, no clickbait lies, never "Ghibli"). Match the title to the kind of video (Charity, 18 Nov):
