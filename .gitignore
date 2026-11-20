@@ -8,3 +8,5 @@ __pycache__/
 !brand/*.jpg
 bedroom/f*.png
 food/*.png
+*/out/
+*.log
