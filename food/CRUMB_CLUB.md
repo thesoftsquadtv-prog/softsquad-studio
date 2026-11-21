@@ -88,6 +88,7 @@ Every video is a tiny comedy, not just a pretty clip. Before generating anything
 - Start the tasting shot with the spoon **already at her lips** so the "…oh no" face follows a visible taste.
 - Test each shot at **720p** first (cheaper), then render the approved ones at 1080p.
 - **What worked (21 Nov, 'the corn tried it'):** 3 shots × 6 s at 720p ($0.42 each), upscaled with lanczos (fine for the cartoon style), made the whole skit for $1.54. Shots 2 and 3 were made as edits of shot 1's frame (previous_interaction_id), which kept the cook and corn the same. End on a **freeze-frame of the peak reaction**, because Omni takes relax the face in the last second. Skit captions: Inter ExtraBold on a dark plate (`box=1`), with double spaces between words; a plain outline reads as a different font over dark shots.
+- **Charity's skit standard (21 Nov, she rejected a 3-shot cut):** show EVERY story beat as its own shot (~8–10 shots, 35–45 s): the fear, the tiptoe, the fall, the cook still oblivious, her noticing it's missing (double-take), the search and find, the pick-up, the drop into the pot (splash), the food trapped and scared, then the taste and a big dramatic reaction. The food stays in character (scared in the pot, never smirking at the camera unless the story says so). Budget ~$3.70 per skit at 720p. In drawtext, never put a colon in the caption text (it breaks the filter into a thin fallback font).
 - Skit-day budget: see the spend cap in "Running the channel" (Charity decides; default $3).
 
 ## Titles, descriptions, hashtags
