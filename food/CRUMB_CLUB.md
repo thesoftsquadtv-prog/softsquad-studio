@@ -40,6 +40,13 @@ Charity: "it doesn't need my permission to post, it should create a video every 
 - **24 Nov (Tue):** Thanksgiving skit: family cooking together, the turkey keeps escaping between shots, guests arrive to a very sweaty turkey. Title "happy thanksgiving 🦃".
 - After that: a cooking/kitchen-chaos skit at least every 3rd day, food moments and food in love in between.
 
+## Skit lessons (21 Nov corn skit failed review 3×)
+- Omni redraws a food character whenever it moves fast (face design changes, black-dot pupils, plush/felt look). Keep the food's on-screen motion **small and slow**; show fast action through a **cut or a sound** (e.g. a thud off-screen, then the corn already under the table).
+- Spell out the face in **every** shot prompt (eye shape and colour: soft cocoa eyes with highlights, never black dots; mouth; where it sits on the food).
+- Start the tasting shot with the spoon **already at her lips** so the "…oh no" face follows a visible taste.
+- Test each shot at **720p** first (cheaper), then render the approved ones at 1080p.
+- Skit-day budget: see the spend cap in "Running the channel" (Charity decides; default $3).
+
 ## Titles, descriptions, hashtags
 Goal: people laugh, feel good, share and tag a friend.
 - **Title** (≤ 60 chars, funny, plain words, at most 1 emoji, no clickbait lies, never "Ghibli"). Match the title to the kind of video (Charity, 18 Nov):
