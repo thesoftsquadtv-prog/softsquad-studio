@@ -77,6 +77,11 @@ Every video is a tiny comedy, not just a pretty clip. Before generating anything
 9. **Comment bait in the description:** a question people want to answer ("which ingredient would YOU save? 👇", "tag the friend who cooks like this").
 10. **Reviewer's extra question:** besides "what's out of place?", ask a fresh reviewer: "Is this actually funny? Where's the laugh? Would you send it to a friend?" If the answer is no, punch it up (sharper caption, stronger reaction, better ending) before posting.
 
+## Charity's notes on the corn skit (21 Nov) — how she wants a story told
+- **Don't squeeze a story into 3 shots.** Show every beat that makes it funny: the corn **tiptoeing away scared** (glancing back, sweating), the **slip and fall** under the table, the cook **still cooking, oblivious**, "time for the corn" → **empty counter, double-take, search**, she **checks under the table, finds it, happy grin**, picks it up while it panics, **drops it in the pot (splash)**, the corn **floating in the soup, scared, staring up at her** while she stirs, she **tastes** it → **big dramatic reaction**. ~9 shots, 35–45 s, with sound effects on every beat.
+- **Physical logic for the story:** once the corn is in the pot it is IN the pot (floating, scared), **not looking at the camera** like a narrator. Characters react to each other, not to us, unless the gag is a deliberate wink.
+- **"Add more drama":** suspense music for the escape, slow-motion fall, dramatic music for the search, exaggerated taste reaction (eyes watering, cheeks puffing, fanning mouth).
+
 ## Skit lessons (21 Nov corn skit failed review 3×)
 - Omni redraws a food character whenever it moves fast (face design changes, black-dot pupils, plush/felt look). Keep the food's on-screen motion **small and slow**; show fast action through a **cut or a sound** (e.g. a thud off-screen, then the corn already under the table).
 - Spell out the face in **every** shot prompt (eye shape and colour: soft cocoa eyes with highlights, never black dots; mouth; where it sits on the food).
