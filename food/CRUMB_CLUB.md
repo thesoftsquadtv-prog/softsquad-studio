@@ -36,9 +36,16 @@ Charity: "it doesn't need my permission to post, it should create a video every 
 - **Variety:** rotate the three kinds (kitchen chaos, food moments, food in love) and different foods/cuisines; never the same food two days running; check the last 7 posts so nothing repeats (YouTube inauthentic-content policy). Ride the calendar (Thanksgiving, Christmas, New Year diets, Valentine's, Super Bowl snacks).
 
 ## Planned schedule (Charity, 20 Nov) — follow this before the free rotation
-- **21 Nov (Sat):** kitchen-chaos skit: **the corn escapes under the table** (Charity's original idea — cook tosses ingredients in confidently, corn sneaks off and falls under the table, she finds it and uses it anyway while it screams, tastes, "…oh no" face). Short punchy title, e.g. "the corn tried it 🌽".
+- ~~21 Nov corn skit (failed review; redo as an animated skit later)~~ — corn escapes under the table (Charity's original idea — cook tosses ingredients in confidently, corn sneaks off and falls under the table, she finds it and uses it anyway while it screams, tastes, "…oh no" face). Short punchy title, e.g. "the corn tried it 🌽".
 - **24 Nov (Tue):** Thanksgiving skit: family cooking together, the turkey keeps escaping between shots, guests arrive to a very sweaty turkey. Title "happy thanksgiving 🦃".
 - After that: a cooking/kitchen-chaos skit at least every 3rd day, food moments and food in love in between.
+
+## Look of the cooking skits (Charity, 21 Nov) — IMPORTANT
+- The cook must be an **animated, cute and funny cartoon person, NOT a realistic human.** Charity saw the 21 Nov corn skit with a photoreal woman and rejected it: "i expected the person cooking to be an animated person, that looks cute and funny".
+- So kitchen-chaos skits are made **entirely in one original cute 3D-animated style** (whole scene, cook AND food): soft rounded shapes, big expressive eyes, exaggerated funny expressions and reactions, warm cosy kitchen, bright soft lighting, stylised textures. The food characters are cartoon too, so cook and food match. Our own original designs only — never imitate a specific studio's or film's characters, and never name a studio/film in prompts or titles.
+- The cook is a recurring character with a fixed design sheet (make one reference image first and reuse it every skit so viewers recognise her/him). Comic timing: big oblivious smile while cooking, double-take, the "…oh no" face exaggerated.
+- Single-food moments and food-in-love videos (butter at the spa, marshmallows) **stay photoreal** — no humans in them, and they're working.
+- Disclosure: animated skits are still AI-generated → keep `isAiGeneratedContent: true` for Crumb Club.
 
 ## Skit lessons (21 Nov corn skit failed review 3×)
 - Omni redraws a food character whenever it moves fast (face design changes, black-dot pupils, plush/felt look). Keep the food's on-screen motion **small and slow**; show fast action through a **cut or a sound** (e.g. a thud off-screen, then the corn already under the table).
