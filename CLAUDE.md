@@ -50,6 +50,10 @@ Daily slots (Lagos): Soft Squad 16:00 + 19:00 (YouTube + TikTok; 19:00 already f
 - Soft Ambience 1-min rainy lane: 12 views, 53% viewed — testing 20 s loops (lightning hook) instead.
 - Soft Squad: 11 subs, 6.6k views/28 days; comfort-list Shorts are the best performers.
 
+## "What if" verdict — 21 Nov 2026
+- What if Social Battery 1,137 views / 17 likes and Overthinking Level 1,053 / 18 average **1,095 views, 17.5 likes** vs episodes 1–10 (8–17 Nov) average **694 views, 11 likes** → What-if wins by ~1.6×. Love Language (211) shows the hook must be an inner state you'd love to see on others, not a category. Comfort lists/group dynamics stay strong too (We Need to Talk 1,259; Sunday Night Feelings 1,235; Things That Are Actually Okay 1,168 / 36 likes).
+- Decision: **keep What-if inside The Soft Squad** (a second channel would start from 0 subs and split momentum). Mix ≈ 1 What-if + 1 comfort-list/group-dynamics Short per day. Drop formats under ~200 views (soft affirmations, plans cancelled).
+
 ## Results — 21 Nov 2026 (latest)
 - Metricool (YouTube, lags): **Soft Ambience is waking up**: "stay a while, the storm will pass ⛈️" thunderstorm 1,254 views, windy autumn night 570, rainy village 532. **safe space**: "what i need right now" 968, "waiting for him to call" 632, "first snow… i thought of you" 308 (1 day). **Soft Squad**: Things That Are Actually Okay 1,168 (36 likes), Social Battery 1,137, Overthinking 1,053, Love Language 211 (1.5 days, weaker: an "inner state meter" beats a category label), Payday 497.
 - Storm + lightning in the first second is the best Soft Ambience hook so far → today's loop is a stormy lighthouse with lightning at 0.45 s.
