@@ -47,6 +47,19 @@ Charity: "it doesn't need my permission to post, it should create a video every 
 - Single-food moments and food-in-love videos (butter at the spa, marshmallows) **stay photoreal** — no humans in them, and they're working.
 - Disclosure: animated skits are still AI-generated → keep `isAiGeneratedContent: true` for Crumb Club.
 
+## Make people laugh (Charity, 21 Nov: "more effort… people need to watch and laugh, they need to be engaged")
+Every video is a tiny comedy, not just a pretty clip. Before generating anything, write a **beat sheet** (shot by shot, with the second each beat lands) and check it against this list:
+1. **Hook in the first second:** something is already happening (the corn already mid-escape, a scream, a ridiculous caption). Never open on a calm establishing shot.
+2. **Relatable setup:** the joke is about something viewers live (cooking for the in-laws, pretending you can cook, Monday leftovers, diet starting "tomorrow").
+3. **Escalation:** at least 2–3 beats that get bigger (corn sneaks → corn slips → corn hides → corn gets caught), not one gag.
+4. **Twist / payoff at the end:** a punchline the viewer didn't see coming (she tastes it and it's the best thing she's ever made, and the corn is offended; or the salt shaker winks at camera). The last second should make people rewatch or comment.
+5. **Big, readable reactions:** exaggerated faces, double-takes, side-eye at the camera, held for long enough to read on a phone.
+6. **Sound sells the joke:** comic timing in audio: a tiny scream, a thud, a record-scratch pause, a gulp, a "boing". Silence just before the payoff.
+7. **Caption = the joke's setup, not a description:** e.g. "me pretending i know what i'm doing in the kitchen", "the corn had other plans".
+8. **Built to loop:** the last frame flows back into the first so people watch twice.
+9. **Comment bait in the description:** a question people want to answer ("which ingredient would YOU save? 👇", "tag the friend who cooks like this").
+10. **Reviewer's extra question:** besides "what's out of place?", ask a fresh reviewer: "Is this actually funny? Where's the laugh? Would you send it to a friend?" If the answer is no, punch it up (sharper caption, stronger reaction, better ending) before posting.
+
 ## Skit lessons (21 Nov corn skit failed review 3×)
 - Omni redraws a food character whenever it moves fast (face design changes, black-dot pupils, plush/felt look). Keep the food's on-screen motion **small and slow**; show fast action through a **cut or a sound** (e.g. a thud off-screen, then the corn already under the table).
 - Spell out the face in **every** shot prompt (eye shape and colour: soft cocoa eyes with highlights, never black dots; mouth; where it sits on the food).
