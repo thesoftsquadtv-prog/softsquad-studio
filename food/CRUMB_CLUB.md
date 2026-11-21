@@ -79,6 +79,7 @@ Every video is a tiny comedy, not just a pretty clip. Before generating anything
 - Spell out the face in **every** shot prompt (eye shape and colour: soft cocoa eyes with highlights, never black dots; mouth; where it sits on the food).
 - Start the tasting shot with the spoon **already at her lips** so the "…oh no" face follows a visible taste.
 - Test each shot at **720p** first (cheaper), then render the approved ones at 1080p.
+- **What worked (21 Nov, 'the corn tried it'):** 3 shots × 6 s at 720p ($0.42 each), upscaled with lanczos (fine for the cartoon style), made the whole skit for $1.54. Shots 2 and 3 were made as edits of shot 1's frame (previous_interaction_id), which kept the cook and corn the same. End on a **freeze-frame of the peak reaction**, because Omni takes relax the face in the last second. Skit captions: Inter ExtraBold on a dark plate (`box=1`), with double spaces between words; a plain outline reads as a different font over dark shots.
 - Skit-day budget: see the spend cap in "Running the channel" (Charity decides; default $3).
 
 ## Titles, descriptions, hashtags

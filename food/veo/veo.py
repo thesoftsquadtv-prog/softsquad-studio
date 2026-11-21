@@ -257,13 +257,15 @@ def animate(img, outdir):
             "response_format": {"type": "video", "aspect_ratio": "9:16", "duration": f"{dur}s",
                                 "resolution": res, "delivery": "uri"},
             "background": False, "store": True, "stream": False}
+    if os.environ.get("I2V_FILE"):  # per-shot prompt for skits
+        body["input"][1]["text"] = open(os.environ["I2V_FILE"]).read().strip()
     print(f"model: {model}  1 x {dur}s {res} 9:16 from {os.path.basename(img)}  ~${est:.2f} + thinking")
     t0 = time.time()
     d = _interact(body, timeout=900)  # no automatic retry: a timed-out call may still be billed
     v = video_part(d)
     meta = {k: v2 for k, v2 in d.items() if k != "steps"}
     meta["seconds"] = round(time.time() - t0)
-    json.dump({"model": model, "prompt": I2V_PROMPT, "frame": img, "response": meta},
+    json.dump({"model": model, "prompt": body["input"][1]["text"], "frame": img, "response": meta},
               open(os.path.join(outdir, "meta.json"), "w"), indent=1)
     if not v:
         sys.exit(f"no video returned: status {d.get('status')}")
