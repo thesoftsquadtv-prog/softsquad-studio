@@ -240,6 +240,22 @@ def _():
      endcard("What are you<br>bringing? 🦃","Tell us in the comments 👇",numbers=False),
     ])
 
+@ep(16,"ep16-what-if-sunday-scaries","What If You Could See Everyone's Sunday Scaries? 😰 #shorts",
+ "what if you could see everyone's sunday scaries? 😰 which one are you? 👇\n\nwhat % are your sunday scaries at right now? drop it below 💬\n\n#thesoftsquad #sundayscaries #sundaynight #relatable #adulting #animation #shorts",
+ ["sunday scaries","sunday night","what if","the soft squad","animation"])
+def _():
+    L="😰 Sunday scaries"
+    return build([
+     wif_hook("What if you could see<br>everyone's Sunday scaries? 😰",
+        {"Milo":("73%",AMB),"Kemi":("0%",GRN),"Juno":("100%",RED),"Amara":("40%",AMB),"Toffee":("0%",PUR)}),
+     reveal("Juno","Juno: 100%",L,"100%",RED,100,sub="*it started at breakfast*",moods=[[0,"sad"]]),
+     reveal("Amara","Amara: 40%",L,"40%",AMB,40,sub="*remembered Friday's email*",moods=[[0,"happy"],[1.6,"calm"]]),
+     reveal("Milo","Milo: 73%",L,"73%",AMB,73,sub="*opened his laptop “just to check”… 3 hours ago*",moods=[[0,"sad"]]),
+     reveal("Kemi","Kemi: totally calm?",L,"0%",GRN,0,sub="*just remembered the 9am presentation*",moods=[[0,"spark"],[2.0,"sad"]],swap=(2.0,"97%",RED,97),dur=4.6),
+     reveal("Toffee","Toffee: 0%",L,"0%",PUR,0,sub="*has never had a Monday*",moods=[[0,"happy"]]),
+     endcard("What's your<br>% today? 😰","Drop your % below 👇",numbers=False),
+    ])
+
 if __name__=="__main__":
     n=int(sys.argv[1]); e=EPS[n]
     sys.argv=[sys.argv[0]]+sys.argv[2:]
