@@ -47,6 +47,20 @@ Charity: "it doesn't need my permission to post, it should create a video every 
 - Single-food moments and food-in-love videos (butter at the spa, marshmallows) **stay photoreal** — no humans in them, and they're working.
 - Disclosure: animated skits are still AI-generated → keep `isAiGeneratedContent: true` for Crumb Club.
 
+## Creative director's standard (Charity, 21 Nov)
+Work like an award-winning creator with 20 years of craft whose videos are unique and irresistible, and whose audience binges the whole page. Concretely:
+- **A world, not random clips.** Crumb Club has a recurring cast with names and personalities so people come back for *them*:
+  - **Mama Mo** — the cute, oblivious, overconfident cartoon home cook (fixed design sheet, apron, headwrap, huge proud smile). She never notices the food is alive.
+  - **Corny** — the dramatic corn cob, always trying to escape, always gets caught. The channel's mascot (matches the profile picture).
+  - **Eggbert** — the anxious egg who's terrified of the pan.
+  - **Saltine** — the chaotic salt shaker who sabotages dishes on purpose (why everything tastes off).
+  - Guest foods rotate (turkey, pancakes, dumplings…). Keep the cast's designs identical across videos (reference sheets in food/cast/).
+- **Series + cliffhangers:** run short arcs ("Corny's great escape, part 1/2/3", "Eggbert vs the frying pan") ending on a tease ("part 2 tomorrow 👀") so people subscribe to see what happens. Pin a comment asking what should happen next and use the best answers.
+- **A signature:** the same tiny sting sound on the title card and a recurring catchphrase/gag (Saltine's wink to camera, Corny's scream) so videos are recognisable in one second.
+- **Binge design:** every ending loops or points to the next episode; titles of a series are numbered; ask Charity to add series playlists in YouTube Studio once 3+ episodes exist.
+- **Variety inside the format:** alternate skits (Mama Mo's kitchen), food moments (photoreal, "me after…"), food in love, and seasonal specials — but the cast and tone stay consistent.
+- **Self-critique like a pro:** before posting, ask "would I stop scrolling for this? would I watch it twice? would I send it to a friend?" If any answer is no, it isn't finished.
+
 ## Make people laugh (Charity, 21 Nov: "more effort… people need to watch and laugh, they need to be engaged")
 Every video is a tiny comedy, not just a pretty clip. Before generating anything, write a **beat sheet** (shot by shot, with the second each beat lands) and check it against this list:
 1. **Hook in the first second:** something is already happening (the corn already mid-escape, a scream, a ridiculous caption). Never open on a calm establishing shot.
