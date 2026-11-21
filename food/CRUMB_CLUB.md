@@ -29,7 +29,10 @@ Also: holidays and moments (Thanksgiving family cooking with an escaping turkey,
 
 ## Running the channel (autonomous — Charity's standing approval, 18 Nov 2026)
 Charity: "it doesn't need my permission to post, it should create a video every day and post it with funny titles, remember we want people to laugh and feel good."
-- **Make one new video every day and schedule it yourself.** No approval step. Quality gate instead: the "what's out of place?" review must pass (separate reviewer agent). If a video doesn't pass after fixes within the day's budget, post nothing that day rather than a weak one, and say why in the report.
+- **Make one new video every day and schedule it yourself — a video goes out EVERY day.** No approval step. (Charity, 21 Nov: "don't be too strict with it so that videos can go out every day… you're talented, you don't have to try too hard to be great.") Work with the confidence of an experienced creator: plan it well, make it once, make it fun, ship it.
+  - The review is a **polish pass, not a gate**. Only these are blockers that must be fixed before posting: a broken or melting face, extra/missing limbs or faces, a character turning into something else, unreadable/garbled text, a realistic human in a skit (the cook must be animated), or anything disturbing. Fix those with a cut, a crop, a freeze, a caption or one re-take.
+  - Small imperfections (a slightly odd hand, a bit of stylised steam, a prop not quite right) are fine — note them in the log as lessons and post anyway.
+  - If a skit still has a blocker after one fix within budget, post a simpler video instead (one shot, a food moment) — but never leave the day empty.
 - **Accounts:** YouTube @thecrumbclub (UC_H2r0rLOvUhpxDi2N0CztQ); Metricool brand **8212990** (timezone Africa/Lagos).
 - **Slot:** 19:00 Lagos daily (Charity: everything out by 19:00). Always `getScheduledPosts` for blogId 8212990 first; never double-post a day. If the next night is already filled, make the following night's video.
 - **Order:** first post = the butter-at-the-spa video made 18 Nov (night of 18→19 Nov, 19:00). Then one new video per day. Thanksgiving turkey skit must post 24 or 25 Nov (Thanksgiving is Thu 26 Nov).
