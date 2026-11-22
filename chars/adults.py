@@ -30,6 +30,10 @@ def face(m,skin,lashes=False):
         s+=f'<path d="M108 66 q7 -9 14 0 M138 66 q7 -9 14 0" stroke="{INK}" stroke-width="3.6" fill="none" stroke-linecap="round"/>'
         s+=f'<path d="M120 80 q10 11 20 0z" fill="#d9606c" stroke="{INK}" stroke-width="2.4" stroke-linejoin="round"/>'
         s+=f'<path d="M107 53 q8 -5 15 -2 M138 51 q7 -3 15 2" stroke="{INK}" stroke-width="2.6" fill="none" stroke-linecap="round" opacity=".8"/>'
+    elif m=="listen":  # "wait… where is that coming from?": eyes glancing to the side, brows up, small o mouth
+        for x in (115,145): s+=f'<ellipse cx="{x}" cy="65" rx="5.4" ry="7" fill="{INK}" transform="translate(-3 0)"/><circle cx="{x-1}" cy="62.4" r="2.1" fill="#fff"/>'+lash(x)
+        s+=f'<path d="M107 50 q8 -6 15 -3 M138 47 q7 -3 15 3" stroke="{INK}" stroke-width="2.6" fill="none" stroke-linecap="round"/>'
+        s+=f'<ellipse cx="131" cy="85" rx="4.2" ry="5" fill="#b5566a" stroke="{INK}" stroke-width="2"/>'
     elif m=="sad":
         for x in (115,145): s+=f'<ellipse cx="{x}" cy="66" rx="5" ry="6.5" fill="{INK}"/><circle cx="{x+1.8}" cy="63.5" r="1.9" fill="#fff"/>'+lash(x)
         s+=f'<path d="M107 56 L122 51 M153 56 L138 51" stroke="{INK}" stroke-width="2.8" stroke-linecap="round"/>'
@@ -44,6 +48,7 @@ def face(m,skin,lashes=False):
 def arms(m,col,skin,cuff=None):
     if m=="happy":   P=["M94 120 q-32 -6 -42 -58","M166 120 q32 -6 42 -58"]; ends=[(52,62),(208,62)]
     elif m=="sad":   P=["M94 120 q-12 50 30 60","M166 120 q12 50 -30 60"]; ends=[(124,180),(136,180)]
+    elif m=="listen": P=["M94 120 q-12 42 -6 80","M166 120 q26 -12 12 -50"]; ends=[(88,200),(176,70)]
     elif m=="calm":  P=["M94 120 q-6 40 20 70","M166 120 q6 40 -20 70"]; ends=[(114,190),(146,190)]
     else:            P=["M94 120 q-14 42 -8 82","M166 120 q34 -8 42 -56"]; ends=[(86,202),(208,64)]
     s="".join(f'<path d="{p}" stroke="{col}" stroke-width="17" fill="none" stroke-linecap="round"/>' for p in P)
@@ -77,7 +82,7 @@ HAIR={
  "Milo":dict(skin="#f2c9a5",top="#a8cfac",jacket="#6f8fb8",lapel="#5c7aa2",bottom="cargo",bottom_c="#4a4e5e",shoe_c="#f4f1ea",
    extra='<path d="M110 106 q20 14 40 0" stroke="#8fbf95" stroke-width="7" fill="none" stroke-linecap="round"/><path d="M126 114 v18 M134 114 v18" stroke="#f4f1ea" stroke-width="2.6" stroke-linecap="round"/>'
          '<path d="M100 112 l62 82" stroke="#3b3540" stroke-width="5" stroke-linecap="round"/><rect x="152" y="182" width="26" height="20" rx="6" fill="#3b3540"/>'
-         '<path d="M90 62 q-6 -48 40 -48 q46 0 40 48 q-8 -18 -20 -23 q2 10 -6 13 q-4 -13 -18 -15 q-6 13 -18 13 q0 -10 -5 -15 q-15 9 -13 27z" fill="#6b4a32"/>'),
+         '<path d="M90 62 q-6 -48 40 -48 q46 0 40 48 q-8 -18 -20 -23 q2 10 -6 13 q-4 -13 -18 -15 q-6 13 -18 13 q0 -10 -5 -15 q-7 12 -13 27z" fill="#6b4a32"/>'),
  # Juno: cream oversized cardigan over a lilac tee, wide-leg jeans, headphones, tote bag
  "Juno":dict(skin="#e8b48f",top="#b8a6e6",jacket="#f1e6d6",lapel="#e2d3bd",bottom="wide",bottom_c="#5d7fb5",shoe_c="#f4d35e",lashes=True,
    hair_back='<path d="M88 58 q-8 84 6 104 h72 q14 -20 6 -104z" fill="#3b2a4a"/>',

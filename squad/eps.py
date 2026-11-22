@@ -256,6 +256,39 @@ def _():
      endcard("What's your<br>% today? 😰","Drop your % below 👇",numbers=False),
     ])
 
+# browser-style "tabs open in your head" prop
+def tabs(label,count,color,titles,sound=None,size=84):
+    strip="".join(f'<div style="flex:1;min-width:0;background:{"#fff" if i==0 else "#ece6f1"};border-radius:14px 14px 0 0;padding:8px 12px;font-size:26px;color:#5a536a;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;text-align:left">{"🔊 " if sound==i else ""}{t}</div>' for i,t in enumerate(titles))
+    return (f'<div style="background:#fff;border-radius:30px;box-shadow:0 10px 30px rgba(0,0,0,.12);font-family:Poppins,sans-serif;overflow:hidden">'
+            f'<div style="display:flex;gap:6px;background:#d9d1e2;padding:12px 14px 0">{strip}</div>'
+            f'<div style="padding:14px 24px 20px;text-align:center"><div style="font-size:30px;color:#8a8399;font-weight:500">{label}</div>'
+            f'<div style="font-size:{size}px;font-weight:700;color:{color};line-height:1.1">{count}</div></div></div>')
+def treveal(name,line,count,color,titles,sub=None,moods=None,dur=4.2,sound=None,swap=None,msize=84):
+    L="🗂️ tabs open in their head"
+    b=who(name,line,sub=sub,prop=tabs(L,count,color,titles,sound,msize),moods=moods,dur=dur,size=76,prop_w=600,prop_y=400)
+    if swap:
+        t,c2,col2,ti2,snd2=swap; m=b["els"][2]
+        m["kf"]=m["kf"]+[[t-0.05,{"o":1}],[t,{"o":0}]]
+        x=(1080-600)//2
+        b["els"].insert(3,H(tabs(L,c2,col2,ti2,snd2,msize),x,400,600,kf=[[t-0.01,{"x":x,"y":400,"s":1.25,"o":0}],[t,{"x":x,"y":400,"s":1.25,"o":1}],[t+0.35,{"x":x,"y":400,"s":1,"o":1},"back"]]))
+        b["sfx"].append((t,"buzz"))
+    return b
+
+@ep(17,"ep17-what-if-tabs","What If You Could See How Many Tabs Are Open in Everyone's Head? 🗂️ #shorts",
+ "what if you could see how many tabs are open in everyone's head? 🗂️ which one are you? 👇\n\nhow many tabs are open in YOUR head right now? drop the number 💬\n\n#thesoftsquad #overthinking #mentalload #relatable #adulting #animation #shorts",
+ ["tabs open in my head","mental load","what if","relatable","the soft squad","animation"])
+def _():
+    return build([
+     wif_hook("What if you could see<br>how many tabs are open<br>in everyone's head? 🗂️",
+        {"Milo":("64",AMB),"Kemi":("3",GRN),"Juno":("213",RED),"Amara":("12",GRN),"Toffee":("1",PUR)}),
+     treveal("Kemi","Kemi: 3 tabs","3",GRN,["to-do list","gym 6am","calendar"],sub="*closes each one the second it's done*",moods=[[0,"spark"]]),
+     treveal("Milo","Milo: 64 tabs","64",AMB,["emails","2019 😬","…"],sub="*music is playing in one. can't find which* 🎵",moods=[[0,"happy"],[1.6,"listen"]]),
+     treveal("Juno","Juno: 213 tabs","213",RED,["read later","read later","read later"],sub="*all “read later”. none read.*",moods=[[0,"calm"]]),
+     treveal("Amara","Amara: just a few?","12",GRN,["my plans","groceries","…"],sub="*+ everyone else's problems*",moods=[[0,"happy"],[2.0,"sad"]],swap=(2.0,"146",RED,["kemi's cv","milo's crush","…"],None),dur=4.8),
+     treveal("Toffee","Toffee: 1 tab","1",PUR,["🐟 snacks"],sub="*open since 2022.<br>no regrets.*",moods=[[0,"happy"]]),
+     endcard("Tabs open in<br>your head? 🗂️","Drop your number below 👇",numbers=False),
+    ])
+
 if __name__=="__main__":
     n=int(sys.argv[1]); e=EPS[n]
     sys.argv=[sys.argv[0]]+sys.argv[2:]
