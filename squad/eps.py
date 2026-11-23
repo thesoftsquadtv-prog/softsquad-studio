@@ -289,6 +289,23 @@ def _():
      endcard("Tabs open in<br>your head? 🗂️","Drop your number below 👇",numbers=False),
     ])
 
+@ep(18,"ep18-what-if-family-dinner","What If You Could See Everyone's Stress Level at Family Dinner? 🦃 #shorts",
+ "what if you could see everyone's stress level at family dinner? 🦃 which one are you? 👇\n\nwhat's the one question you're dreading at the table this year? 💬\n\n#thesoftsquad #thanksgiving #familydinner #holidays #relatable #animation #shorts",
+ ["family dinner","thanksgiving","holiday stress","what if","the soft squad","animation"])
+def _():
+    L="🦃 family-dinner stress"
+    return build([
+     wif_hook("What if you could see<br>everyone's stress level<br>at family dinner? 🦃",
+        {"Milo":("88%",RED),"Kemi":("12%",GRN),"Juno":("61%",AMB),"Amara":("30%",GRN),"Toffee":("0%",PUR)},
+        prop=card("<small>family group chat · now</small>dinner at 4. don't be late!",40),prop_w=680),
+     reveal("Milo","Milo: 88%",L,"88%",RED,88,sub="*rehearsed “work's great!”<br>the whole drive*",moods=[[0,"forced"]]),
+     reveal("Juno","Juno: 61%",L,"61%",AMB,61,sub="*seated at the kids'<br>table. again.*",moods=[[0,"deadpan"]]),
+     reveal("Amara","Amara: 30%",L,"30%",GRN,30,sub="*volunteered to wash up.<br>2 hours, zero questions*",moods=[[0,"happy"]]),
+     reveal("Kemi","Kemi: totally calm?",L,"12%",GRN,12,sub="*then auntie asked:<br>“so… seeing anyone?”*",moods=[[0,"spark"],[2.0,"sad"]],swap=(2.0,"100%",RED,100),dur=4.8),
+     reveal("Toffee","Toffee: 0%",L,"0%",PUR,0,sub="*will hug anyone<br>holding turkey*",moods=[[0,"spark"]]),
+     endcard("What's your<br>stress level? 🦃","Drop your % below 👇",numbers=False),
+    ])
+
 if __name__=="__main__":
     n=int(sys.argv[1]); e=EPS[n]
     sys.argv=[sys.argv[0]]+sys.argv[2:]

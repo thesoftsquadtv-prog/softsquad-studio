@@ -23,7 +23,7 @@ def who(name,line,sub=None,prop=None,moods=None,dur=4.0,size=80,sub_t=1.6,prop_w
     c,bg=COL[name]
     els=[H(label(name,c),90,150,400),T(line,90,260,900,size,t0=0.25)]
     if prop: els.append(H(prop,prop_x if prop_x is not None else (1080-prop_w)//2,prop_y,prop_w,t0=0.9))
-    if sub: els.append(T(sub,90,640 if not prop else 730,900,60,t0=sub_t,cls="sub",extra="color:#8a8399"))
+    if sub: els.append(T(sub,90,640 if not prop else 665,900,60,t0=sub_t,cls="sub",extra="color:#8a8399"))
     w,x,y=(500,290,900) if name=="Toffee" else (640,220,880)
     els.append(C(name,x,y,w,moods or [[0,"happy"]],t0=0.0))
     sfx=[(0.3,"pop")]+([(0.9,"pop")] if prop else [])+([(sub_t,"ding")] if sub else [])

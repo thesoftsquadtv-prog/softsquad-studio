@@ -37,7 +37,7 @@ def shadow(): return '<ellipse cx="130" cy="297" rx="70" ry="9" fill="#000" opac
 def toffee(m):
     c="#e9a868"; d="#c9844a"
     legs,arms=limbs(c,m,dark=d)
-    tail='<path d="M172 260 q50 -5 38 -55" stroke="#d9944f" stroke-width="15" fill="none" stroke-linecap="round"/>'
+    tail='<path d="M166 272 q42 14 60 -6" stroke="#d9944f" stroke-width="15" fill="none" stroke-linecap="round"/>'
     ears=('<path d="M58 95 l4 -62 52 38z" fill="#e9a868"/><path d="M202 95 l-4 -62 -52 38z" fill="#e9a868"/><path d="M68 82 l3 -32 27 20z" fill="#f7cdb0"/><path d="M192 82 l-3 -32 -27 20z" fill="#f7cdb0"/>' if m!="sad" else '<path d="M55 108 l-22 -48 56 18z" fill="#e9a868"/><path d="M205 108 l22 -48 -56 18z" fill="#e9a868"/>')
     head=f'<ellipse cx="130" cy="135" rx="88" ry="76" fill="{c}"/><path d="M112 66 q18 -12 36 0" stroke="{d}" stroke-width="7" fill="none" stroke-linecap="round"/><path d="M118 80 q12 -7 24 0" stroke="{d}" stroke-width="6" fill="none" stroke-linecap="round"/>'
     whisk='<g stroke="#b9773f" stroke-width="3" stroke-linecap="round"><line x1="38" y1="150" x2="62" y2="152"/><line x1="40" y1="162" x2="62" y2="160"/><line x1="222" y1="150" x2="198" y2="152"/><line x1="220" y1="162" x2="198" y2="160"/></g>'

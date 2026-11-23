@@ -34,6 +34,17 @@ def face(m,skin,lashes=False):
         for x in (115,145): s+=f'<ellipse cx="{x}" cy="65" rx="5.4" ry="7" fill="{INK}" transform="translate(-3 0)"/><circle cx="{x-1}" cy="62.4" r="2.1" fill="#fff"/>'+lash(x)
         s+=f'<path d="M107 50 q8 -6 15 -3 M138 47 q7 -3 15 3" stroke="{INK}" stroke-width="2.6" fill="none" stroke-linecap="round"/>'
         s+=f'<ellipse cx="131" cy="85" rx="4.2" ry="5" fill="#b5566a" stroke="{INK}" stroke-width="2"/>'
+    elif m=="forced":  # rehearsed "everything's great!": wide eyes, brows up, big stiff toothy grin, sweat drop
+        for x in (115,145): s+=f'<ellipse cx="{x}" cy="64" rx="6.2" ry="8" fill="{INK}"/><circle cx="{x+2}" cy="61" r="2.3" fill="#fff"/>'+lash(x)
+        s+=f'<path d="M106 48 q8 -6 16 -3 M138 45 q8 -3 16 3" stroke="{INK}" stroke-width="2.6" fill="none" stroke-linecap="round"/>'
+        s+=f'<path d="M115 79 h30 q0 11 -15 11 q-15 0 -15 -11z" fill="#ffffff" stroke="{INK}" stroke-width="2.4" stroke-linejoin="round"/><path d="M116 80 h28" stroke="{INK}" stroke-width="1.4" opacity=".35"/>'
+        s+='<path d="M161 54 q-5 8 0 12 q5 -4 0 -12z" fill="#8cc4f0"/>'
+    elif m=="deadpan":  # unimpressed: heavy half-closed lids, flat brows, flat mouth
+        for x in (115,145):
+            s+=f'<ellipse cx="{x}" cy="67" rx="5.4" ry="6.2" fill="{INK}"/><circle cx="{x+1.6}" cy="68.6" r="1.6" fill="#fff"/>'
+            s+=f'<path d="M{x-8} 66.5 h16 v-10 h-16z" fill="{skin}"/><path d="M{x-7.6} 66.6 h15.2" stroke="{INK}" stroke-width="2.6" stroke-linecap="round"/>'
+        s+=f'<path d="M107 55 h15 M138 55 h15" stroke="{INK}" stroke-width="2.4" stroke-linecap="round" opacity=".75"/>'
+        s+=f'<path d="M124 84 h12" stroke="{INK}" stroke-width="2.6" stroke-linecap="round"/>'
     elif m=="sad":
         for x in (115,145): s+=f'<ellipse cx="{x}" cy="66" rx="5" ry="6.5" fill="{INK}"/><circle cx="{x+1.8}" cy="63.5" r="1.9" fill="#fff"/>'+lash(x)
         s+=f'<path d="M107 56 L122 51 M153 56 L138 51" stroke="{INK}" stroke-width="2.8" stroke-linecap="round"/>'
@@ -49,6 +60,18 @@ def arms(m,col,skin,cuff=None):
     if m=="happy":   P=["M94 120 q-32 -6 -42 -58","M166 120 q32 -6 42 -58"]; ends=[(52,62),(208,62)]
     elif m=="sad":   P=["M94 120 q-12 50 30 60","M166 120 q12 50 -30 60"]; ends=[(124,180),(136,180)]
     elif m=="listen": P=["M94 120 q-12 42 -6 80","M166 120 q26 -12 12 -50"]; ends=[(88,200),(176,70)]
+    elif m=="forced": # left arm stiff at side, right fist thumbs-up at chest height
+        s=f'<path d="M94 120 q-10 40 -6 78" stroke="{col}" stroke-width="17" fill="none" stroke-linecap="round"/><path d="M166 120 q24 26 20 -10" stroke="{col}" stroke-width="17" fill="none" stroke-linecap="round"/>'
+        if cuff: s+=f'<circle cx="88" cy="198" r="9.5" fill="{cuff}"/><circle cx="186" cy="110" r="9.5" fill="{cuff}"/>'
+        s+=f'<circle cx="88" cy="198" r="8" fill="{skin}"/><rect x="179" y="96" width="15" height="14" rx="5" fill="{skin}"/><rect x="182" y="84" width="6" height="16" rx="3" fill="{skin}"/>'
+        s+=f'<path d="M181 101 h12 M181 105.5 h12" stroke="rgba(0,0,0,.18)" stroke-width="1.2"/>'
+        return s
+    elif m=="deadpan": # arms crossed over the chest, the right forearm on top
+        s=f'<path d="M94 120 q-12 30 4 38 q22 6 52 -4" stroke="{col}" stroke-width="17" fill="none" stroke-linecap="round"/>'
+        s+=f'<circle cx="152" cy="153" r="7.5" fill="{skin}"/>'
+        s+=f'<path d="M166 120 q12 32 -4 42 q-22 8 -50 0" stroke="{col}" stroke-width="17" fill="none" stroke-linecap="round"/>'
+        s+=f'<circle cx="108" cy="162" r="7.5" fill="{skin}"/>'
+        return s
     elif m=="calm":  P=["M94 120 q-6 40 20 70","M166 120 q6 40 -20 70"]; ends=[(114,190),(146,190)]
     else:            P=["M94 120 q-14 42 -8 82","M166 120 q34 -8 42 -56"]; ends=[(86,202),(208,64)]
     s="".join(f'<path d="{p}" stroke="{col}" stroke-width="17" fill="none" stroke-linecap="round"/>' for p in P)
