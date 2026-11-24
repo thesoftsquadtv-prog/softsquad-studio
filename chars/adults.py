@@ -63,8 +63,12 @@ def arms(m,col,skin,cuff=None):
     elif m=="forced": # left arm stiff at side, right fist thumbs-up at chest height
         s=f'<path d="M94 120 q-10 40 -6 78" stroke="{col}" stroke-width="17" fill="none" stroke-linecap="round"/><path d="M166 120 q24 26 20 -10" stroke="{col}" stroke-width="17" fill="none" stroke-linecap="round"/>'
         if cuff: s+=f'<circle cx="88" cy="198" r="9.5" fill="{cuff}"/><circle cx="186" cy="110" r="9.5" fill="{cuff}"/>'
-        s+=f'<circle cx="88" cy="198" r="8" fill="{skin}"/><rect x="179" y="96" width="15" height="14" rx="5" fill="{skin}"/><rect x="182" y="84" width="6" height="16" rx="3" fill="{skin}"/>'
-        s+=f'<path d="M181 101 h12 M181 105.5 h12" stroke="rgba(0,0,0,.18)" stroke-width="1.2"/>'
+        s+=f'<circle cx="88" cy="198" r="8" fill="{skin}"/>'
+        # thumbs-up seen from the front: curled fingers stacked as a rounded block, thumb rising from its top inner (body-side) corner, tilted out
+        s+=f'<path d="M181 92 q-1.5 -9 1 -12 q3 -3 5.5 0 q1.5 4 0.5 12z" fill="{skin}" stroke="rgba(0,0,0,.22)" stroke-width="1"/>'
+        s+=f'<rect x="178" y="91" width="19" height="19" rx="7" fill="{skin}"/>'
+        s+=f'<path d="M186 96.5 h10 M186 101 h10.5 M186 105.5 h10" stroke="rgba(0,0,0,.2)" stroke-width="1.3" stroke-linecap="round"/>'
+        s+=f'<path d="M180 94 q3 3 6 2" stroke="rgba(0,0,0,.2)" stroke-width="1.2" fill="none" stroke-linecap="round"/>'
         return s
     elif m=="deadpan": # arms crossed over the chest, the right forearm on top
         s=f'<path d="M94 120 q-12 30 4 38 q22 6 52 -4" stroke="{col}" stroke-width="17" fill="none" stroke-linecap="round"/>'
@@ -93,18 +97,18 @@ def outfit(top,jacket=None,jl=None):
         s+=f'<path d="M92 122 q2 -16 22 -18 h6 l6 96 q-17 2 -34 -2z" fill="{jacket}"/><path d="M168 122 q-2 -16 -22 -18 h-6 l-6 96 q17 2 34 -2z" fill="{jacket}"/>'
         s+=f'<path d="M114 104 l8 26 l-6 4z M146 104 l-8 26 l6 4z" fill="{jl}"/>'
     return s
-def adult(m,skin,top,bottom_c,shoe_c,no_arms=False,bottom="slim",jacket=None,lapel=None,sleeve=None,hair_back="",hair_front="",extra_back="",extra="",lashes=False,belt=None):
+def adult(m,skin,top,bottom_c,shoe_c,no_arms=False,bottom="slim",jacket=None,lapel=None,sleeve=None,hair_back="",hair_front="",extra_back="",extra="",lashes=False,belt=None,strap=""):
     sh='<ellipse cx="130" cy="298" rx="62" ry="8" fill="#000" opacity=".08"/>'
     neck=f'<rect x="121" y="96" width="18" height="16" rx="6" fill="{skin}"/>'
     b=bottoms(bottom,bottom_c,skin)+sneakers(shoe_c)
     belt_s=f'<rect x="98" y="192" width="64" height="7" rx="3" fill="{belt}"/><rect x="126" y="191" width="9" height="9" rx="2" fill="#ffd166"/>' if belt else ''
-    return sh+hair_back+extra_back+b+outfit(top,jacket,lapel)+belt_s+neck+('' if no_arms else arms(m,sleeve or jacket or top,skin))+face(m,skin,lashes)+hair_front+extra
+    return sh+hair_back+extra_back+b+outfit(top,jacket,lapel)+belt_s+neck+strap+('' if no_arms else arms(m,sleeve or jacket or top,skin))+face(m,skin,lashes)+hair_front+extra
 
 HAIR={
  # Milo: oversized sage hoodie under an open denim jacket, cargo trousers, chunky sneakers, crossbody bag
  "Milo":dict(skin="#f2c9a5",top="#a8cfac",jacket="#6f8fb8",lapel="#5c7aa2",bottom="cargo",bottom_c="#4a4e5e",shoe_c="#f4f1ea",
+   strap='<path d="M100 112 l62 82" stroke="#3b3540" stroke-width="5" stroke-linecap="round"/><rect x="152" y="182" width="26" height="20" rx="6" fill="#3b3540"/>',
    extra='<path d="M110 106 q20 14 40 0" stroke="#8fbf95" stroke-width="7" fill="none" stroke-linecap="round"/><path d="M126 114 v18 M134 114 v18" stroke="#f4f1ea" stroke-width="2.6" stroke-linecap="round"/>'
-         '<path d="M100 112 l62 82" stroke="#3b3540" stroke-width="5" stroke-linecap="round"/><rect x="152" y="182" width="26" height="20" rx="6" fill="#3b3540"/>'
          '<path d="M90 62 q-6 -48 40 -48 q46 0 40 48 q-8 -18 -20 -23 q2 10 -6 13 q-4 -13 -18 -15 q-6 13 -18 13 q0 -10 -5 -15 q-7 12 -13 27z" fill="#6b4a32"/>'),
  # Juno: cream oversized cardigan over a lilac tee, wide-leg jeans, headphones, tote bag
  "Juno":dict(skin="#e8b48f",top="#b8a6e6",jacket="#f1e6d6",lapel="#e2d3bd",bottom="wide",bottom_c="#5d7fb5",shoe_c="#f4d35e",lashes=True,

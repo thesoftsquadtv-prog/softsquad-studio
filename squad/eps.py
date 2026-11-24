@@ -306,6 +306,24 @@ def _():
      endcard("What's your<br>stress level? 🦃","Drop your % below 👇",numbers=False),
     ])
 
+
+@ep(19,"ep19-what-if-travel-patience","What If You Could See Everyone's Holiday Travel Patience? ✈️ #shorts",
+ "what if you could see everyone's holiday travel patience? ✈️ which one are you? 👇\n\nwhat's the worst travel delay you've ever survived? 💬\n\n#thesoftsquad #holidaytravel #thanksgiving #airport #relatable #animation #shorts",
+ ["holiday travel","airport delay","thanksgiving travel","what if","relatable","the soft squad","animation"])
+def _():
+    L="✈️ travel patience"
+    return build([
+     wif_hook("What if you could see<br>everyone's patience<br>at the airport? ✈️",
+        {"Milo":("9%",RED),"Kemi":("100%",GRN),"Juno":("54%",AMB),"Amara":("95%",GRN),"Toffee":("0%",RED)},
+        prop=card("<small>gate B12 · now</small>flight 214: DELAYED ⏳",40),prop_w=680),
+     reveal("Juno","Juno: 54%",L,"54%",AMB,54,sub="*headphones on.<br>pretending it's a spa*",moods=[[0,"calm"]]),
+     reveal("Milo","Milo: 9%",L,"9%",RED,9,sub="*4th gate change.<br>stopped running at 2*",moods=[[0,"deadpan"]]),
+     reveal("Amara","Amara: 95%",L,"95%",GRN,95,sub="*made friends with<br>the whole gate*",moods=[[0,"happy"]]),
+     reveal("Kemi","Kemi: totally calm?",L,"100%",GRN,100,sub="*then they said:<br>“the flight's overbooked”*",moods=[[0,"spark"],[2.0,"forced"]],swap=(2.0,"3%",RED,3),dur=4.8),
+     reveal("Toffee","Toffee: 0%",L,"0%",RED,0,sub="*has meowed since<br>security. 2 hours.*",moods=[[0,"yowl"]]),
+     endcard("What's your<br>patience at? ✈️","Drop your % below 👇",numbers=False),
+    ])
+
 if __name__=="__main__":
     n=int(sys.argv[1]); e=EPS[n]
     sys.argv=[sys.argv[0]]+sys.argv[2:]
