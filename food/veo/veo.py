@@ -222,7 +222,13 @@ def frame(dst, instruction=None, prev=None):
     ok, msg = probe(IMG_MODEL)
     if not ok:
         sys.exit(f"{IMG_MODEL} not available (nothing spent): {msg}")
-    body = {"model": IMG_MODEL, "input": instruction or FRAME_PROMPT,
+    inp = instruction or FRAME_PROMPT
+    if os.environ.get("IMG_REFS"):  # comma-separated reference images (e.g. cast sheets) sent before the text
+        import base64
+        inp = [{"type": "image", "mime_type": "image/png" if r.lower().endswith(".png") else "image/jpeg",
+                "data": base64.b64encode(open(r, "rb").read()).decode()}
+               for r in os.environ["IMG_REFS"].split(",")] + [{"type": "text", "text": inp}]
+    body = {"model": IMG_MODEL, "input": inp,
             "response_format": {"type": "image", "mime_type": "image/jpeg",
                                 "aspect_ratio": os.environ.get("IMG_AR", "9:16"),
                                 "image_size": os.environ.get("IMG_SIZE", "2K")}}
@@ -235,7 +241,8 @@ def frame(dst, instruction=None, prev=None):
     cost = _img_cost(d.get("usage"))
     print(f"saved {dst}  id={d.get('id')}  ~${cost:.3f}")
     with open(os.path.splitext(dst)[0] + ".json", "w") as f:
-        json.dump({"id": d.get("id"), "usage": d.get("usage"), "prompt": body["input"], "prev": prev,
+        json.dump({"id": d.get("id"), "usage": d.get("usage"), "prompt": instruction or FRAME_PROMPT, "prev": prev,
+                   "refs": os.environ.get("IMG_REFS"),
                    "cost_usd": round(cost, 4)}, f, indent=1)
 
 
