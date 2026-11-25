@@ -324,6 +324,24 @@ def _():
      endcard("What's your<br>patience at? ✈️","Drop your % below 👇",numbers=False),
     ])
 
+
+@ep(20,"ep20-what-if-food-coma","What If You Could See How Full Everyone Is After Thanksgiving Dinner? 🥧 #shorts",
+ "what if you could see how full everyone is after thanksgiving dinner? 🥧 which one are you? 👇\n\nbe honest: how many plates did you have? 💬\n\n#thesoftsquad #thanksgiving #foodcoma #thanksgivingdinner #relatable #animation #shorts",
+ ["thanksgiving","food coma","thanksgiving dinner","what if","relatable","the soft squad","animation"])
+def _():
+    L="🥧 how full"
+    return build([
+     wif_hook("What if you could see<br>how full everyone is<br>after Thanksgiving? 🥧",
+        {"Milo":("140%",RED),"Kemi":("60%",GRN),"Juno":("97%",AMB),"Amara":("85%",AMB),"Toffee":("300%",PUR)},
+        prop=card("<small>family group chat · now</small>pie in 10 mins! 🥧",40),prop_w=680),
+     reveal("Juno","Juno: 97%",L,"97%",AMB,97,sub="*food coma. eyes closed<br>mid-conversation*",moods=[[0,"doze"]]),
+     reveal("Amara","Amara: 85%",L,"85%",AMB,85,sub="*heard “pie’s ready!”<br>and suddenly found room*",moods=[[0,"happy"]]),
+     reveal("Milo","Milo: 140%",L,"140%",RED,100,sub="*went back for thirds.<br>regrets nothing (yet)*",moods=[[0,"stuffed"]]),
+     reveal("Kemi","Kemi: pacing herself?",L,"60%",GRN,60,sub="*then grandma brought<br>out a second pie*",moods=[[0,"spark"],[2.0,"deadpan"]],swap=(2.0,"150%",RED,100),dur=4.8),
+     reveal("Toffee","Toffee: 300%",L,"300%",PUR,100,sub="*one bite of turkey.<br>asleep for 6 hours*",moods=[[0,"coma"]]),
+     endcard("How full<br>are you? 🥧","Drop your % below 👇",numbers=False),
+    ])
+
 if __name__=="__main__":
     n=int(sys.argv[1]); e=EPS[n]
     sys.argv=[sys.argv[0]]+sys.argv[2:]

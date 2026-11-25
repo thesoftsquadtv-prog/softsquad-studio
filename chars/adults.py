@@ -45,6 +45,18 @@ def face(m,skin,lashes=False):
             s+=f'<path d="M{x-8} 66.5 h16 v-10 h-16z" fill="{skin}"/><path d="M{x-7.6} 66.6 h15.2" stroke="{INK}" stroke-width="2.6" stroke-linecap="round"/>'
         s+=f'<path d="M107 55 h15 M138 55 h15" stroke="{INK}" stroke-width="2.4" stroke-linecap="round" opacity=".75"/>'
         s+=f'<path d="M124 84 h12" stroke="{INK}" stroke-width="2.6" stroke-linecap="round"/>'
+    elif m=="stuffed":  # proudly full: heavy half-open lids, puffed rosy cheeks, satisfied grin
+        for x in (115,145):
+            s+=f'<ellipse cx="{x}" cy="67" rx="5.2" ry="5.8" fill="{INK}"/><circle cx="{x+1.6}" cy="68.2" r="1.5" fill="#fff"/>'
+            s+=f'<path d="M{x-8} 66 q8 2.5 16 0 v-10 h-16z" fill="{skin}"/><path d="M{x-7.8} 66 q7.8 2.6 15.6 0" stroke="{INK}" stroke-width="2.6" fill="none" stroke-linecap="round"/>'
+        s+=f'<path d="M108 54 q7 -4 14 -1 M138 53 q7 -3 14 1" stroke="{INK}" stroke-width="2.4" fill="none" stroke-linecap="round" opacity=".7"/>'
+        s+=f'<ellipse cx="102" cy="79" rx="9.5" ry="7" fill="#ff8fa3" opacity=".34"/><ellipse cx="158" cy="79" rx="9.5" ry="7" fill="#ff8fa3" opacity=".34"/>'
+        s+=f'<path d="M121 81 q9 8 18 0" stroke="{INK}" stroke-width="2.8" fill="none" stroke-linecap="round"/>'
+    elif m=="doze":  # food-coma doze: soft closed curves with outer lashes, tiny content mouth
+        for x,o in ((115,-1),(145,1)):
+            s+=f'<path d="M{x-7} 66 q7 5 14 0" stroke="{INK}" stroke-width="3" fill="none" stroke-linecap="round"/><path d="M{x+o*7} 66 l{o*3} 1.5 M{x+o*5} 68.5 l{o*2.4} 2.6" stroke="{INK}" stroke-width="1.8" stroke-linecap="round"/>'
+        s+=f'<path d="M108 55 q7 -3 14 -1 M138 54 q7 -2 14 1" stroke="{INK}" stroke-width="2.2" fill="none" stroke-linecap="round" opacity=".6"/>'
+        s+=f'<path d="M126 84 q4 3 8 0" stroke="{INK}" stroke-width="2.4" fill="none" stroke-linecap="round"/>'
     elif m=="sad":
         for x in (115,145): s+=f'<ellipse cx="{x}" cy="66" rx="5" ry="6.5" fill="{INK}"/><circle cx="{x+1.8}" cy="63.5" r="1.9" fill="#fff"/>'+lash(x)
         s+=f'<path d="M107 56 L122 51 M153 56 L138 51" stroke="{INK}" stroke-width="2.8" stroke-linecap="round"/>'
@@ -76,6 +88,19 @@ def arms(m,col,skin,cuff=None):
         s+=f'<path d="M166 120 q12 32 -4 42 q-22 8 -50 0" stroke="{col}" stroke-width="17" fill="none" stroke-linecap="round"/>'
         s+=f'<circle cx="108" cy="162" r="7.5" fill="{skin}"/>'
         return s
+    elif m in ("stuffed","doze"): # left hand laid flat on a full tummy; doze: both hands, stuffed: right fist thumbs-up ("no regrets")
+        P=["M94 120 q-18 38 12 58","M166 120 q18 30 -10 50" if m=="doze" else "M166 120 q24 26 20 -10"]
+        # a soft darker edge under each sleeve so it still reads against a same-colour cardigan
+        s="".join(f'<path d="{p}" stroke="rgba(0,0,0,.13)" stroke-width="20" fill="none" stroke-linecap="round"/><path d="{p}" stroke="{col}" stroke-width="17" fill="none" stroke-linecap="round"/>' for p in P)
+        if cuff: s+=f'<circle cx="106" cy="178" r="9.5" fill="{cuff}"/>'
+        for hx,hy,d in (((110,179,1),(152,171,-1)) if m=="doze" else ((110,179,1),)):
+            s+=f'<path d="M{hx-6*d} {hy-6} q{12*d} -3 {20*d} 0 q{3*d} 6 0 12 q{-10*d} 3 {-20*d} 0z" fill="{skin}"/>'
+            s+=f'<path d="M{hx+4*d} {hy-1.5} h{9*d} M{hx+4*d} {hy+2.5} h{9*d}" stroke="rgba(0,0,0,.16)" stroke-width="1.1" stroke-linecap="round"/>'
+        if m=="stuffed":
+            s+=f'<path d="M181 92 q-1.5 -9 1 -12 q3 -3 5.5 0 q1.5 4 0.5 12z" fill="{skin}" stroke="rgba(0,0,0,.22)" stroke-width="1"/>'
+            s+=f'<rect x="178" y="91" width="19" height="19" rx="7" fill="{skin}"/>'
+            s+=f'<path d="M186 96.5 h10 M186 101 h10.5 M186 105.5 h10" stroke="rgba(0,0,0,.2)" stroke-width="1.3" stroke-linecap="round"/>'
+        return s
     elif m=="calm":  P=["M94 120 q-6 40 20 70","M166 120 q6 40 -20 70"]; ends=[(114,190),(146,190)]
     else:            P=["M94 120 q-14 42 -8 82","M166 120 q34 -8 42 -56"]; ends=[(86,202),(208,64)]
     s="".join(f'<path d="{p}" stroke="{col}" stroke-width="17" fill="none" stroke-linecap="round"/>' for p in P)
@@ -102,7 +127,9 @@ def adult(m,skin,top,bottom_c,shoe_c,no_arms=False,bottom="slim",jacket=None,lap
     neck=f'<rect x="121" y="96" width="18" height="16" rx="6" fill="{skin}"/>'
     b=bottoms(bottom,bottom_c,skin)+sneakers(shoe_c)
     belt_s=f'<rect x="98" y="192" width="64" height="7" rx="3" fill="{belt}"/><rect x="126" y="191" width="9" height="9" rx="2" fill="#ffd166"/>' if belt else ''
-    return sh+hair_back+extra_back+b+outfit(top,jacket,lapel)+belt_s+neck+strap+('' if no_arms else arms(m,sleeve or jacket or top,skin))+face(m,skin,lashes)+hair_front+extra
+    bulge=(f'<ellipse cx="130" cy="172" rx="42" ry="25" fill="{jacket or top}"/>' if m in ("stuffed","doze") else '')
+    crease=('<path d="M110 190 q20 8 40 0" stroke="rgba(0,0,0,.10)" stroke-width="3" fill="none" stroke-linecap="round"/>' if m in ("stuffed","doze") else '')
+    return sh+hair_back+extra_back+b+bulge+outfit(top,jacket,lapel)+crease+belt_s+neck+strap+('' if no_arms else arms(m,sleeve or jacket or top,skin))+face(m,skin,lashes)+hair_front+extra
 
 HAIR={
  # Milo: oversized sage hoodie under an open denim jacket, cargo trousers, chunky sneakers, crossbody bag
