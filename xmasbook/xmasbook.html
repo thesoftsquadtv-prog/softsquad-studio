@@ -75,7 +75,7 @@ function buildingsPaint(q){
  // --- right neighbour (lower, painted render, attic window lit) ---
  q.fillStyle='#4a4f5c';q.fillRect(920,560,200,GND-560);q.fillStyle='rgba(0,0,0,.25)';q.fillRect(920,560,14,GND-560);
  q.fillStyle='#262833';q.beginPath();q.moveTo(910,570);q.lineTo(1000,470);q.lineTo(1120,470);q.lineTo(1120,570);q.closePath();q.fill();
- sash(q,975,740,90,160,0,4);sash(q,975,1010,90,160,1,5);
+ sash(q,975,740,90,160,0,4);sash(q,975,1010,90,160,1,7);
  q.fillStyle='#33303c';q.fillRect(930,1250,190,GND-1250);q.fillStyle='#d9d2c4';q.fillRect(966,1296,104,GND-1296);q.fillStyle='#2d3a55';q.fillRect(974,1340,88,GND-1340);
  q.fillStyle='#24304a';q.fillRect(974,1340,88,8);q.strokeStyle='rgba(255,255,255,.08)';q.lineWidth=3;q.strokeRect(984,1360,68,70);q.strokeRect(984,1446,68,90);
  q.fillStyle='#e8c46a';ell(q,1048,1450,5,5);q.fill();q.fillStyle='#1d2236';q.fillRect(974,1304,88,30);q.fillStyle='rgba(255,200,130,.25)';q.fillRect(978,1308,80,22);q.fillStyle='#d9d2c4';q.fillRect(1016,1304,4,30);
@@ -104,10 +104,10 @@ function buildingsPaint(q){
  // upper floors: 2 × 2 sash windows, one lit
  sash(q,250,700,140,190,0,21);sash(q,680,700,140,190,1,22);sash(q,250,950,140,190,1,25);sash(q,680,950,140,190,0,24);
  // window box with trailing ivy under the lit first-floor window
- q.fillStyle='#3b2a22';q.fillRect(666,876,168,30);q.fillStyle='rgba(255,190,120,.25)';q.fillRect(666,876,168,3);
- for(let i=0;i<26;i++){const x=670+r()*160,L=20+r()*60;q.strokeStyle='#2f4a2e';q.lineWidth=2;q.beginPath();q.moveTo(x,890);q.quadraticCurveTo(x+(r()-0.5)*18,900+L*0.5,x+(r()-0.5)*10,900+L);q.stroke();
+ q.fillStyle='#3b2a22';q.fillRect(666,904,168,24);q.fillStyle='rgba(255,190,120,.25)';q.fillRect(666,904,168,3);
+ for(let i=0;i<26;i++){const x=670+r()*160,L=2+r()*4;q.strokeStyle='#2f4a2e';q.lineWidth=2;q.beginPath();q.moveTo(x,890);q.quadraticCurveTo(x+(r()-0.5)*18,900+L*0.5,x+(r()-0.5)*10,900+L);q.stroke();
   for(let k=0;k<4;k++){q.fillStyle=k%2?'#3c5e38':'#456b40';ell(q,x+(r()-0.5)*12,896+r()*L,5,3.6);q.fill();}}
- for(let i=0;i<9;i++){q.fillStyle=i%3?'#b3262e':'#d6343c';ell(q,680+i*18,870+(i%2)*6,5,5);q.fill();}
+ for(let i=0;i<9;i++){q.fillStyle=i%3?'#b3262e':'#d6343c';ell(q,680+i*18,898+(i%2)*5,5,5);q.fill();}
  // downpipe on the right edge of the building
  q.fillStyle='#22232b';q.fillRect(x1-34,632,14,GND-632-10);q.fillStyle='rgba(255,255,255,.08)';q.fillRect(x1-32,632,3,GND-642);
  q.fillStyle='#22232b';q.beginPath();q.moveTo(x1-34,GND-20);q.lineTo(x1-20,GND-20);q.lineTo(x1-12,GND-6);q.lineTo(x1-26,GND-6);q.closePath();q.fill();     // shoe
@@ -220,19 +220,21 @@ function snowStreet(q){
  // road under snow; one car has passed: a pair of narrow wheel ruts (wider apart nearer the camera), slush ridges, slight wander
  g=q.createLinearGradient(0,CURB+28,0,H);g.addColorStop(0,'#b7bfd4');g.addColorStop(1,'#d2d8e7');q.fillStyle=g;q.fillRect(0,CURB+28,W,H-CURB-28);
  const r=rng(19);
- for(const [yc,wd] of [[1738,15],[1812,20]]){
-  for(let x=-10;x<=W+10;x+=6){const y=yc+Math.sin(x*0.004+yc)*6;
-   q.fillStyle='rgba(78,84,104,.55)';ell(q,x,y,5,wd*0.42);q.fill();
-   q.fillStyle='rgba(40,44,58,.25)';if(r()<0.35){ell(q,x+r()*4,y+(r()-0.5)*wd*0.5,3,2);q.fill();}
-   q.fillStyle='rgba(232,236,246,.9)';ell(q,x,y-wd*0.5-1,4+r()*2,2+r()*1.5);q.fill();
-   q.fillStyle='rgba(150,158,182,.7)';ell(q,x,y+wd*0.5+1,4+r()*2,1.6+r());q.fill();}}
+ for(const [yc,wd,ph] of [[1742,16,0.3],[1818,22,1.1]]){
+  const path=new Path2D();for(let x=-40;x<=W+40;x+=20){const y=yc+Math.sin(x*0.0032+ph)*10;x>-40?path.lineTo(x,y):path.moveTo(x,y);}
+  const fadeX=(c)=>{const g=q.createLinearGradient(0,0,W,0);g.addColorStop(0,c.replace('A','0'));g.addColorStop(0.12,c.replace('A','1'));g.addColorStop(0.88,c.replace('A','1'));g.addColorStop(1,c.replace('A','0'));return g;};
+  q.save();q.filter='blur(4px)';q.globalAlpha=0.55;q.strokeStyle=fadeX('rgba(112,120,150,A)');q.lineWidth=wd;q.stroke(path);
+  q.globalAlpha=0.7;q.translate(0,-wd*0.62);q.strokeStyle=fadeX('rgba(240,243,250,A)');q.lineWidth=wd*0.35;q.stroke(path);q.restore();
+  q.save();q.filter='blur(3px)';q.globalAlpha=0.35;q.translate(0,wd*0.55);q.strokeStyle=fadeX('rgba(150,158,182,A)');q.lineWidth=wd*0.3;q.stroke(path);q.restore();}
  // soft blue shadows in the snow surface
  q.save();q.filter='blur(6px)';for(let i=0;i<30;i++){q.fillStyle='rgba(120,130,170,.12)';ell(q,r()*W,CURB+60+r()*(H-CURB-60),40+r()*80,5+r()*6);q.fill();}q.restore();
  // the shop's stone doorstep with a lip of snow
- q.fillStyle='#8b8784';q.fillRect(DOOR.x-22,GND,DOOR.w+44,14);q.fillStyle='#6e6a68';q.fillRect(DOOR.x-22,GND+14,DOOR.w+44,4);snowCap(q,DOOR.x-24,GND,DOOR.x+DOOR.w+24,GND,6,90);
+ q.save();q.filter='blur(5px)';q.fillStyle='rgba(30,30,44,.45)';q.fillRect(DOOR.x-26,GND+18,DOOR.w+56,10);q.restore();
+ q.fillStyle='#6c6866';q.fillRect(DOOR.x-22,GND+2,DOOR.w+44,10);q.fillStyle='#57534f';q.fillRect(DOOR.x-22,GND+12,DOOR.w+44,10);q.fillStyle='rgba(255,196,130,.28)';q.fillRect(DOOR.x-8,GND+2,DOOR.w+16,10);
+ snowCap(q,DOOR.x-26,GND+2,DOOR.x-4,GND+2,5,90);snowCap(q,DOOR.x+DOOR.w+4,GND+2,DOOR.x+DOOR.w+26,GND+2,5,91);
  // footprints: paired L/R hollows pressed into the snow, walking in from the left and turning up to the doorstep
- const P=[];for(let k=0;k<=24;k++){const u=k/24;const x=lerp(-20,DOOR.x+DOOR.w/2,u),y=lerp(CURB-16,GND+24,Math.pow(u,1.5));P.push([x,y]);}
- for(let k=1;k<P.length;k++){const [x,y]=P[k],[px,py]=P[k-1];const a=Math.atan2(y-py,x-px),side=k%2?1:-1;const nx=-Math.sin(a)*6*side,ny=Math.cos(a)*6*side;const sc=0.75+0.25*(1-k/24);
+ const P=[];for(let k=0;k<=17;k++){const u=k/17;const x=lerp(-10,DOOR.x+DOOR.w/2,u),y=lerp(CURB-18,GND+26,Math.pow(u,1.7));P.push([x,y]);}
+ for(let k=1;k<P.length;k++){const [x,y]=P[k],[px,py]=P[k-1];const a=Math.atan2(y-py,x-px),side=k%2?1:-1;const nx=-Math.sin(a)*11*side,ny=Math.cos(a)*11*side;const sc=(1.9+0.5*(1-k/17));
   q.save();q.translate(x+nx,y+ny);q.rotate(a);q.scale(sc,sc*0.55);
   const fg=q.createRadialGradient(0,-1,0,0,0,9);fg.addColorStop(0,'rgba(96,104,134,.55)');fg.addColorStop(1,'rgba(96,104,134,.12)');q.fillStyle=fg;ell(q,0,0,9,5);q.fill();ell(q,-11,0,4.5,4);q.fill();
   q.fillStyle='rgba(240,243,250,.55)';ell(q,0,5.5,8,1.6);q.fill();q.restore();}
@@ -245,7 +247,7 @@ function snow(t,front){if(!SN){const r=rng(3);SN=[];for(let i=0;i<700;i++)SN.pus
   const rad=front?4.2+d.z*2:0.9+d.z*2.4,a=front?0.55:0.35+d.z*0.45;
   let warm=0;for(const [lx,ly,lr,k] of [[LAMP.x+20,LAMP.y+80,230,1],[DW.x+DW.w/2,GND-100,300,0.6],[490,1340,380,0.5]]){const dd=Math.hypot(x-lx,y-ly);if(dd<lr)warm=Math.max(warm,(1-dd/lr)*k);}
   X.fillStyle=`rgba(255,${(244-30*warm)|0},${(250-80*warm)|0},${a})`;
-  if(front){X.save();X.filter='blur(2.5px)';ell(X,x,y,rad,rad);X.fill();X.restore();}else{ell(X,x,y,rad,rad*0.9);X.fill();}}}
+  if(front){const g=X.createRadialGradient(x,y,0,x,y,rad*1.8);g.addColorStop(0,X.fillStyle);g.addColorStop(1,'rgba(255,255,255,0)');X.fillStyle=g;ell(X,x,y,rad*1.8,rad*1.8);X.fill();}else{ell(X,x,y,rad,rad*0.9);X.fill();}}}
 // string lights: warm bulbs on a dark wire, twinkling (whole cycles per LOOP)
 function bulbs(t,pts,seed){const r=rng(seed);const C=['255,214,140','255,214,140','255,120,110','140,220,150','255,200,90'];
  X.strokeStyle='rgba(20,22,26,.85)';X.lineWidth=1.6;X.beginPath();pts.forEach((p,i)=>i?X.lineTo(p[0],p[1]):X.moveTo(p[0],p[1]));X.stroke();
@@ -276,7 +278,7 @@ function books(x,base){const C=[['#8e3b3b',64,14],['#2f5d6b',58,12],['#c9a24a',5
  C.forEach(([c,w,h],i)=>{y-=h;X.fillStyle=c;rr(X,x-w/2+(i%2?4:-3),y,w,h,2);X.fill();X.fillStyle='#efe6d2';X.fillRect(x-w/2+(i%2?4:-3)+w-6,y+2,4,h-4);});
  X.fillStyle='#2a2a30';X.fillRect(x-10,y-26,20,26);X.fillStyle='#ffe2a0';X.fillRect(x-7,y-22,14,19);X.fillStyle='#2a2a30';X.fillRect(x-12,y-30,24,5);
  const g=X.createRadialGradient(x,y-12,1,x,y-12,40);g.addColorStop(0,'rgba(255,214,150,.45)');g.addColorStop(1,'rgba(255,214,150,0)');X.fillStyle=g;X.fillRect(x-40,y-52,80,80);}
-function tree(t,cx,base){const h=84,potH=22;
+function tree(t,cx,base){const h=76,potH=22;
  // glow it casts on the glass and seat
  const gg=X.createRadialGradient(cx,base-70,6,cx,base-70,140);gg.addColorStop(0,'rgba(255,214,150,.35)');gg.addColorStop(1,'rgba(255,214,150,0)');X.fillStyle=gg;X.fillRect(cx-150,base-220,300,240);
  // pot wrapped in burlap
@@ -293,7 +295,7 @@ function tree(t,cx,base){const h=84,potH=22;
   const tw=0.6+0.4*Math.sin(WK(1+(i%3))*t+i*1.7);const g=X.createRadialGradient(x,y,0,x,y,9);g.addColorStop(0,`rgba(255,226,160,${0.7*tw})`);g.addColorStop(1,'rgba(255,226,160,0)');X.fillStyle=g;X.fillRect(x-9,y-9,18,18);X.fillStyle=`rgba(255,244,210,${0.8+0.2*tw})`;ell(X,x,y,1.8,1.8);X.fill();}
  for(const [u,dx,c] of [[0.35,-10,'#c42a30'],[0.55,14,'#d9a441'],[0.78,-22,'#c42a30'],[0.8,24,'#7aa8d8'],[0.62,-2,'#7aa8d8']]){const y=top+22+u*(h-30);X.fillStyle=c;ell(X,cx+dx,y,4.6,4.6);X.fill();X.fillStyle='rgba(255,255,255,.6)';ell(X,cx+dx-1.4,y-1.4,1.3,1.3);X.fill();}
  const sg=X.createRadialGradient(cx,top,1,cx,top,36);sg.addColorStop(0,`rgba(255,226,140,${0.55+0.15*Math.sin(WK(2)*t)})`);sg.addColorStop(1,'rgba(255,226,140,0)');X.fillStyle=sg;X.fillRect(cx-36,top-36,72,72);
- X.fillStyle='#ffd76a';X.beginPath();for(let k=0;k<10;k++){const a=-Math.PI/2+k*Math.PI/5,rr2=k%2?5.5:13;X.lineTo(cx+Math.cos(a)*rr2,top+Math.sin(a)*rr2);}X.closePath();X.fill();}
+ X.fillStyle='#ffd23f';X.strokeStyle='#b8860b';X.lineWidth=1.2;X.beginPath();for(let k=0;k<10;k++){const a=-Math.PI/2+k*Math.PI/5,rr2=k%2?5.5:13;X.lineTo(cx+Math.cos(a)*rr2,top+Math.sin(a)*rr2);}X.closePath();X.fill();X.stroke();}
 // ---------- live layers ----------
 function interiorLive(t){ // pendants, cat, teapot steam — clipped to the glass openings
  const {f}=flashAt(t);
@@ -396,7 +398,7 @@ function lampPost(t){
 }
 // street reflections of the shop glow, lamp and windows (streaky, broken by ripples)
 function reflections(t){X.save();
- for(const [x,y,rx,ry,a] of [[DW.x+DW.w/2,GND+30,280,60,0.30],[DOOR.x+DOOR.w/2,GND+26,110,40,0.26],[SW.x+40,GND+24,80,30,0.2],[DW.x+DW.w/2+60,CURB+70,420,90,0.13],[LAMP.x+10,CURB-24,150,42,0.32]]){
+ for(const [x,y,rx,ry,a] of [[DW.x+DW.w/2,GND+34,300,64,0.46],[DOOR.x+DOOR.w/2,GND+30,120,44,0.4],[SW.x+40,GND+26,90,32,0.3],[DW.x+DW.w/2+60,CURB+70,420,90,0.13],[LAMP.x+10,CURB-24,150,42,0.32]]){
   X.save();X.translate(x,y);X.scale(1,ry/rx);const g=X.createRadialGradient(0,0,0,0,0,rx);g.addColorStop(0,`rgba(255,184,110,${a})`);g.addColorStop(1,'rgba(255,184,110,0)');X.fillStyle=g;X.fillRect(-rx,-rx,rx*2,rx*2);X.restore();}
  // sparkle in the snow where the shop light reaches (tiny glints that twinkle, whole cycles per LOOP)
  const r=rng(8);for(let i=0;i<70;i++){const x=r()*W,y=GND+8+r()*(H-GND-10),k=1+(i%3);const v=Math.max(0,Math.sin(WK(k)*t+r()*6.28));const near=Math.max(0,1-Math.hypot(x-480,(y-GND)*1.6)/600);
