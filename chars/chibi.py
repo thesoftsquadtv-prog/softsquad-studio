@@ -52,7 +52,35 @@ def deco(mood):
     if mood=="sad": return '<g stroke="#8a86a8" stroke-width="4" fill="none" stroke-linecap="round"><path d="M215 55 c10 -10 22 0 12 10 c-10 10 2 20 12 10"/></g>'
     return '<path d="M210 55 c0 -11 16 -11 16 0 c0 -11 16 -11 16 0 c0 13 -16 21 -16 26 c0 -5 -16 -13 -16 -26z" fill="#ff7a8a"/>'
 def shadow(): return '<ellipse cx="130" cy="297" rx="70" ry="9" fill="#000" opacity=".08"/>'
+def toffee_box():
+    # "the new cat bed arrived. she sleeps in the box": the plush bed sits empty beside her (price tag still on);
+    # she's curled in the open cardboard box, chin on her paws on the rim, eyes softly closed
+    c="#e9a868"; d="#c9844a"; K="#c99a62"; Kd="#a87a46"; Ki="#7d5a34"
+    s='<g transform="translate(34 0)"><ellipse cx="-62" cy="300" rx="84" ry="8" fill="#000" opacity=".08"/><ellipse cx="140" cy="299" rx="88" ry="9" fill="#000" opacity=".10"/>'
+    # the empty plush cat bed (round, raised rim, cushion inside) with a price tag on a string
+    s+='<ellipse cx="-62" cy="276" rx="80" ry="26" fill="#9a8fc9"/><ellipse cx="-62" cy="266" rx="80" ry="24" fill="#b7addf"/><ellipse cx="-62" cy="270" rx="56" ry="14" fill="#e9e4f7"/>'
+    s+='<path d="M-136 262 q74 -22 148 0" stroke="#d4ccf0" stroke-width="5" fill="none" stroke-linecap="round"/>'
+    s+='<path d="M6 262 q14 4 16 16" stroke="#8a86a8" stroke-width="2" fill="none"/><g transform="rotate(18 26 286)"><rect x="16" y="278" width="20" height="28" rx="3" fill="#fff8e6" stroke="#d9c9a0" stroke-width="1.5"/><circle cx="26" cy="283" r="2.2" fill="#d9c9a0"/><path d="M20 292 h12 M20 298 h8" stroke="#e0475b" stroke-width="2.2" stroke-linecap="round"/></g>'
+    s+='<g transform="translate(140 0)"><g transform="translate(-130 0)">'
+    s+=f'<path d="M58 196 h144 l4 22 h-152z" fill="{Ki}"/>'  # inside back wall (shadowed)
+    s+='<path d="M180 210 q40 -2 50 -26" stroke="#d9944f" stroke-width="14" fill="none" stroke-linecap="round"/>'  # tail curling over the rim
+    s+=f'<path d="M58 196 l-30 -26 l-6 44 l32 6z" fill="{Kd}"/><path d="M202 196 l30 -26 l6 44 l-32 6z" fill="{Kd}"/>'  # open side flaps
+    s+=f'<ellipse cx="130" cy="210" rx="62" ry="22" fill="{d}"/>'  # her rounded back curled inside the box
+    # head at ~80% of the box mouth, low, so the rim cuts across her chin
+    s+='<g transform="translate(130 150) scale(0.74) translate(-130 -150)">'
+    s+='<path d="M58 95 l4 -62 52 38z" fill="#e9a868"/><path d="M202 95 l-4 -62 -52 38z" fill="#e9a868"/><path d="M68 82 l3 -32 27 20z" fill="#f7cdb0"/><path d="M192 82 l-3 -32 -27 20z" fill="#f7cdb0"/>'
+    s+=f'<ellipse cx="130" cy="140" rx="88" ry="76" fill="{c}"/><path d="M112 71 q18 -12 36 0" stroke="{d}" stroke-width="7" fill="none" stroke-linecap="round"/><path d="M118 85 q12 -7 24 0" stroke="{d}" stroke-width="6" fill="none" stroke-linecap="round"/>'
+    s+='<g stroke="#b9773f" stroke-width="3" stroke-linecap="round"><line x1="38" y1="155" x2="62" y2="157"/><line x1="40" y1="167" x2="62" y2="165"/><line x1="222" y1="155" x2="198" y2="157"/><line x1="220" y1="167" x2="198" y2="165"/></g>'
+    s+=eyes(130,145,"coma",1)+'</g>'
+    s+=f'<path d="M50 214 h160 l-6 82 h-148z" fill="{K}"/><path d="M50 214 h160 v7 h-160z" fill="{Kd}"/>'  # front panel + rim edge
+    s+='<path d="M120 221 h20 v75 h-20z" fill="#e6c995" opacity=".75"/>'  # packing tape
+    s+='<rect x="150" y="246" width="38" height="24" rx="3" fill="#f6efe2"/><path d="M155 254 h26 M155 261 h18" stroke="#b9a58a" stroke-width="2.4" stroke-linecap="round"/>'  # shipping label
+    for x in (104,156): s+=f'<ellipse cx="{x}" cy="214" rx="19" ry="11" fill="{c}"/><path d="M{x-6} 219 v-5 M{x} 220 v-6 M{x+6} 219 v-5" stroke="{d}" stroke-width="2.2" stroke-linecap="round"/>'  # paws over the rim
+    s+='<g fill="#8a86a9" font-family="Poppins,sans-serif" font-weight="700"><text x="186" y="96" font-size="28">z</text><text x="206" y="72" font-size="20" opacity=".75">z</text><text x="222" y="52" font-size="15" opacity=".5">z</text></g>'
+    s+='</g></g></g>'
+    return s
 def toffee(m):
+    if m=="box": return toffee_box()
     c="#e9a868"; d="#c9844a"
     legs,arms=limbs(c,m,dark=d)
     tail='<path d="M166 272 q42 14 60 -6" stroke="#d9944f" stroke-width="15" fill="none" stroke-linecap="round"/>'

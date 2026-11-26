@@ -342,6 +342,24 @@ def _():
      endcard("How full<br>are you? 🥧","Drop your % below 👇",numbers=False),
     ])
 
+
+@ep(21,"ep21-what-if-black-friday","What If You Could See Everyone's Willpower on Black Friday? 🛍️ #shorts",
+ "what if you could see everyone's willpower on black friday? 🛍️ which one are you? 👇\n\nbe honest: what's in your cart right now? 💬\n\n#thesoftsquad #blackfriday #shopping #relatable #animation #shorts",
+ ["black friday","shopping","willpower","what if","relatable","the soft squad","animation"])
+def _():
+    L="🛍️ willpower"
+    return build([
+     wif_hook("What if you could see<br>everyone's willpower<br>on Black Friday? 🛍️",
+        {"Milo":("4%",RED),"Kemi":("100%",GRN),"Juno":("92%",GRN),"Amara":("35%",AMB),"Toffee":("0%",RED)},
+        prop=card("<small>inbox · now</small>⚡ 70% OFF. 2 hours only.",40),prop_w=680),
+     reveal("Juno","Juno: 92%",L,"92%",GRN,92,sub="*hasn't opened one email.<br>unread: 4,012*",moods=[[0,"calm"]]),
+     reveal("Milo","Milo: 4%",L,"4%",RED,4,sub="*“just browsing.”<br>cart: 47 items*",moods=[[0,"forced"]]),
+     reveal("Amara","Amara: 35%",L,"35%",AMB,35,sub="*bought a gift for everyone.<br>still nothing for herself*",moods=[[0,"gifts"]]),
+     reveal("Kemi","Kemi: only the list?",L,"100%",GRN,100,sub="*then her wishlist item<br>went 70% off*",moods=[[0,"spark"],[2.0,"gasp"]],swap=(2.0,"0%",RED,0),dur=4.8),
+     reveal("Toffee","Toffee: 0%",L,"0%",RED,0,sub="*the new cat bed arrived.<br>sleeps in the box*",moods=[[0,"box"]]),
+     endcard("How's your<br>willpower? 🛍️","Drop your % below 👇",numbers=False),
+    ])
+
 if __name__=="__main__":
     n=int(sys.argv[1]); e=EPS[n]
     sys.argv=[sys.argv[0]]+sys.argv[2:]
