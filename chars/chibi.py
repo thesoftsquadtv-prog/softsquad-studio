@@ -79,8 +79,39 @@ def toffee_box():
     s+='<g fill="#8a86a9" font-family="Poppins,sans-serif" font-weight="700"><text x="186" y="96" font-size="28">z</text><text x="206" y="72" font-size="20" opacity=".75">z</text><text x="222" y="52" font-size="15" opacity=".5">z</text></g>'
     s+='</g></g></g>'
     return s
+def _qb(p0,p1,p2,t):
+    return tuple((1-t)**2*a+2*(1-t)*t*b+t*t*c for a,b,c in zip(p0,p1,p2))
+def fairy_cord(segs,front=True):
+    # Toffee tangled in a string of fairy lights: dark-green cord loops + glowing bulbs hanging off it
+    cols=["#ff5a6e","#ffc94a","#5fd38a","#5aa8ff","#ff8fd0"]; out=""; k=0
+    for (p0,p1,p2,n) in segs:
+        out+=f'<path d="M{p0[0]} {p0[1]} Q{p1[0]} {p1[1]} {p2[0]} {p2[1]}" stroke="#2f5a3a" stroke-width="3.2" fill="none" stroke-linecap="round"/>'
+        for i in range(n):
+            t=(i+0.5)/n; x,y=_qb(p0,p1,p2,t); c=cols[k%5]; k+=1
+            out+=(f'<circle cx="{x:.1f}" cy="{y+7:.1f}" r="10" fill="{c}" opacity=".22"/>'
+                  f'<rect x="{x-3:.1f}" y="{y-1:.1f}" width="6" height="5" rx="1.5" fill="#2f5a3a"/>'
+                  f'<ellipse cx="{x:.1f}" cy="{y+8:.1f}" rx="4.6" ry="6.4" fill="{c}"/>'
+                  f'<ellipse cx="{x-1.4:.1f}" cy="{y+6:.1f}" rx="1.4" ry="2.2" fill="#fff" opacity=".7"/>')
+    return out
+def toffee_lights():
+    # "christmas spirit: 500%": she pulled the fairy lights out of the box and is now wearing them, delighted
+    c="#e9a868"; d="#c9844a"
+    legs,arms=limbs(c,"happy",dark=d)
+    tail='<path d="M166 272 q42 14 60 -6" stroke="#d9944f" stroke-width="15" fill="none" stroke-linecap="round"/>'
+    ears='<path d="M58 95 l4 -62 52 38z" fill="#e9a868"/><path d="M202 95 l-4 -62 -52 38z" fill="#e9a868"/><path d="M68 82 l3 -32 27 20z" fill="#f7cdb0"/><path d="M192 82 l-3 -32 -27 20z" fill="#f7cdb0"/>'
+    head=f'<ellipse cx="130" cy="135" rx="88" ry="76" fill="{c}"/><path d="M112 66 q18 -12 36 0" stroke="{d}" stroke-width="7" fill="none" stroke-linecap="round"/><path d="M118 80 q12 -7 24 0" stroke="{d}" stroke-width="6" fill="none" stroke-linecap="round"/>'
+    whisk='<g stroke="#b9773f" stroke-width="3" stroke-linecap="round"><line x1="38" y1="150" x2="62" y2="152"/><line x1="40" y1="162" x2="62" y2="160"/><line x1="222" y1="150" x2="198" y2="152"/><line x1="220" y1="162" x2="198" y2="160"/></g>'
+    belly='<ellipse cx="130" cy="250" rx="28" ry="24" fill="#f7cdb0"/>'
+    # cord: loop over the body, one wrapped round the raised right arm, one draped over the head between the ears,
+    # and the loose end trailing on the floor to a plug (it isn't plugged in: the glow is the joke's sparkle)
+    body_loops=fairy_cord([((80,214),(130,252),(182,212),5),((86,256),(132,284),(176,254),4),((176,254),(214,292),(250,294),2)])
+    arm_loop=fairy_cord([((182,212),(206,238),(214,204),1),((214,204),(218,188),(232,198),1)])
+    head_loop=fairy_cord([((60,104),(130,58),(200,104),5)])
+    plug='<rect x="248" y="288" width="14" height="10" rx="2" fill="#f2f2f2" stroke="#b8b8c0" stroke-width="1.5"/><path d="M262 291 h5 M262 295 h5" stroke="#b8b8c0" stroke-width="2"/>'
+    return shadow()+tail+legs+body(c)+belly+arms+body_loops+arm_loop+plug+ears+head+whisk+eyes(130,140,"happy",1)+head_loop+deco("happy")
 def toffee(m):
     if m=="box": return toffee_box()
+    if m=="lights": return toffee_lights()
     c="#e9a868"; d="#c9844a"
     legs,arms=limbs(c,m,dark=d)
     tail='<path d="M166 272 q42 14 60 -6" stroke="#d9944f" stroke-width="15" fill="none" stroke-linecap="round"/>'

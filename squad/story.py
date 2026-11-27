@@ -152,6 +152,18 @@ def _():
      beat("cafe",[cap("Day 1:",False,90),card("🏆 <b>Employee of the Month:</b> Toffee",470,760,0.3),ch("Toffee",290,1000,500,"happy")],3.0,[(0.3,"ding")]),
      beat("street_evening",[cap("The squad: 0 offers 😭<br>Toffee: employed 😌",False,74)]+squad_row("sad",toffee_mood="happy"),3.6,[(0.2,"thud")]),
     ])
+@story(23,"ep23-milos-crush-4","Milo's Crush, Part 4: Kemi Replied 💗 #shorts",
+ "Kemi finally replied 💗😭 Toffee deserves a raise. follow for the date 👀\n\nwhat's the bravest text you've ever sent? 👇\n\n#thesoftsquad #crush #texting #firstdate #relatable #animation #shorts",
+ ["crush","texting","first date","the soft squad","animation"])
+def _():
+    return build([
+     beat(bedroom(True,"12:33"),[cap("Kemi is typing… 😳",True,84),subt(tag("Milo's Crush · Part 4"),0.5,770),card("<small>Kemi</small><span style='letter-spacing:6px;color:#8a8399'>• • •</span>",520,720,first=True),ch("Milo",20,1020,520,"spark",bob=False),over(blanket("#9fc7a4"))],3.0,[(0,"pop")]),
+     beat(bedroom(True,"12:34"),[cap("*she stops typing* 😶",False,80),card("<small>Kemi</small><span style='color:#b5b0c2'>last seen 12:34</span>",500,720,0.3),ch("Milo",20,1020,520,"deadpan",bob=False),over(blanket("#9fc7a4"))],2.8),
+     beat(bedroom(True,"12:36"),[cap("*buzz*",False,96),card("<small>Kemi · now</small>wondering if… what? 👀",500,720,0.3),ch("Milo",20,1020,520,"listen",bob=False),over(blanket("#9fc7a4"))],2.8,[(0.3,"buzz")]),
+     beat(bedroom(True,"12:58"),[cap("22 minutes later:",False,80),card("<small>To: Kemi · sent</small>if you want to get coffee? ☕",500,720,0.3),ch("Milo",20,1020,520,"forced",bob=False),over(blanket("#9fc7a4"))],3.0,[(0.3,"pop")]),
+     beat(bedroom(True,"12:59"),[cap("Her reply: 😳",False,90),card("<small>Kemi · now</small>I was hoping you'd ask 💗<br>saturday?",500,720,0.3),ch("Milo",20,1020,520,[[0,"listen"],[1.0,"gasp"]],bob=False),over(blanket("#9fc7a4"))],3.4,[(0.3,"buzz"),(1.0,"ding")]),
+     beat(bedroom(True,"1:00"),[cap("Toffee: you're<br>welcome 😌",False,84),subt("Part 5: the date 💗",1.0,770),ch("Milo",20,1020,520,"happy",bob=False),over(blanket("#9fc7a4")),ch("Toffee",540,1290,240,"spark")],3.2,[(0.2,"pop")]),
+    ])
 if __name__=="__main__":
     n=int(sys.argv[1]); e=ST[n]
     sys.argv=[sys.argv[0]]+sys.argv[2:]

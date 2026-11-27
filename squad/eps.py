@@ -360,6 +360,30 @@ def _():
      endcard("How's your<br>willpower? 🛍️","Drop your % below 👇",numbers=False),
     ])
 
+def snowy(b,t0):  # soft first-snow flakes drifting in over the beat from t0
+    import random; R=random.Random(7)
+    dots="".join(f'<circle cx="{R.uniform(20,1060):.0f}" cy="{R.uniform(30,1880):.0f}" r="{R.uniform(4,11):.1f}" fill="#a9c6ec" opacity="{R.uniform(.6,.95):.2f}"/>' for _ in range(70))
+    svg=f'<svg viewBox="0 0 1080 1920" width="1080" height="1920" style="filter:drop-shadow(0 0 3px rgba(120,140,190,.55))">{dots}</svg>'
+    b["els"].insert(0,H(svg,0,0,1080,kf=[[t0,{"x":0,"y":-60,"o":0}],[t0+0.5,{"x":0,"y":-30,"o":1}],[t0+2.8,{"x":0,"y":40,"o":1},"lin"]]))
+    return b
+
+@ep(22,"ep22-what-if-christmas-spirit","What If You Could See Everyone's Christmas Spirit? 🎄 #shorts",
+ "what if you could see everyone's christmas spirit? 🎄 which one are you? 👇\n\nbe honest: is your tree already up? 💬\n\n#thesoftsquad #christmas #christmasspirit #christmastree #relatable #animation #shorts",
+ ["christmas spirit","christmas tree","holiday season","what if","relatable","the soft squad","animation"])
+def _():
+    L="🎄 christmas spirit"
+    return build([
+     wif_hook("What if you could see<br>everyone's Christmas<br>spirit? 🎄",
+        {"Milo":("2%",RED),"Kemi":("40%",AMB),"Juno":("70%",GRN),"Amara":("999%",GRN),"Toffee":("500%",PUR)},
+        prop=card("<small>squad chat · now</small>tree goes up tonight?? 🎄",40),prop_w=680),
+     reveal("Milo","Milo: 2%",L,"2%",RED,2,sub="*“it's still November.”<br>refuses to hum along*",moods=[[0,"deadpan"]]),
+     reveal("Juno","Juno: 70%",L,"70%",GRN,70,sub="*hums carols quietly.<br>denies it if asked*",moods=[[0,"calm"]]),
+     reveal("Amara","Amara: 999%",L,"999%",GRN,100,sub="*tree up since Nov 1.<br>every gift wrapped*",moods=[[0,"gifts"]]),
+     snowy(reveal("Kemi","Kemi: playing it cool?",L,"40%",AMB,40,sub="*then she saw the<br>first snow fall ❄️*",moods=[[0,"spark"],[2.0,"gasp"]],swap=(2.0,"100%",GRN,100),dur=4.8),2.0),
+     reveal("Toffee","Toffee: 500%",L,"500%",PUR,100,sub="*found the fairy lights.<br>is now wearing them*",moods=[[0,"lights"]]),
+     endcard("How festive<br>are you? 🎄","Drop your % below 👇",numbers=False),
+    ])
+
 if __name__=="__main__":
     n=int(sys.argv[1]); e=EPS[n]
     sys.argv=[sys.argv[0]]+sys.argv[2:]
